@@ -5,13 +5,14 @@ using UnityEngine.XR;
 using System;
 using Unity.Mathematics;
 using System.IO;
+using static UnityEngine.Rendering.DebugUI.Table;
 public class GridSystem : MonoBehaviour
 {
     [SerializeField] private List<CarSO> carSOList;
     private Dictionary<ECarType, CarSO> carSODict;
     [SerializeField] private List<PassengerSO> passengerSOList;
     private List<EColor> carTypeSOList;
-    private List<RowVisualGroup> rowParentVisual;
+    private List<RowVisualGroup> rowParentGameObject;
     private CarSO carSO;
     private PassengerSO passengerSO;
     private Grid<CarObject> gridCar;
@@ -56,29 +57,17 @@ public class GridSystem : MonoBehaviour
         gridPassengerOrigin = new Vector3(-4f, 0, -3f);
 
 
-        gridCar = new Grid<CarObject>(gridCarWidth, gridCarHeight, gridCarCellSize, gridCarOrigin, (Grid<CarObject> g, int x, int z) => new CarObject(g, x, z));
-        gridPassenger = new Grid<PassengerObject> (gridPassengerWidth,gridPassengerHeight ,gridPassengerCellSize,gridPassengerOrigin,(Grid<PassengerObject> g, int x,int z) => new PassengerObject(g, x,z));
+        gridCar = new Grid<CarObject>(gridCarWidth, gridCarHeight, gridCarCellSize, gridCarOrigin, (Grid<CarObject> g) => new CarObject(g));
+        gridPassenger = new Grid<PassengerObject> (gridPassengerWidth,gridPassengerHeight ,gridPassengerCellSize,gridPassengerOrigin,(Grid<PassengerObject> g) => new PassengerObject(g));
         carSO = carSOList[0];
         passengerSO = passengerSOList[0];
-        rowParentVisual = new List<RowVisualGroup>();
+        rowParentGameObject = new List<RowVisualGroup>();
         
 
         gridCar.OnGridRowVisualChanged += Grid_OnGridRowVisualChanged;
         gridCar.OnGridColumnVisualChanged += GridCar_OnGridColumnVisualChanged;
         InitCarFile();
         InitPassenger();
-    }
-    private void GridCar_OnGridColumnVisualChanged(object sender, Grid<CarObject>.OnGridColumnVisualChangedEventArgs e) //co the refactor
-    {
-        if (e.column < 0 || e.column >= gridCarWidth)
-        {
-            Debug.Log("out of index column");
-            return;
-        }
-        for (int i = 0; i < gridCarHeight; i++)
-        {
-            UpdateVisualRowAfterShift(i);
-        }
     }
     private void InitCarFile()
     {
@@ -116,42 +105,25 @@ public class GridSystem : MonoBehaviour
                     Debug.Log("Cant parse enum");
                 }
             }
-            rowParentVisual.Add(new RowVisualGroup(z, centerVisualParent.transform, carGridTotalWidth, this));
+            rowParentGameObject.Add(new RowVisualGroup(z, centerVisualParent.transform, carGridTotalWidth, this));
         }
 
     }
-    //private void InitCar()
-    //{
-    //    for (int z = 0; z < gridCarHeight; z++)
-    //    {
-    //        GameObject rowVisualParent = new GameObject($"Row_{z}");
-    //        rowVisualParent.transform.SetParent( this.transform, false);
-    //        GameObject centerVisualParent = new GameObject($"Row_{z}_Center");
-    //        centerVisualParent.transform.SetParent( rowVisualParent.transform);
-    //        for (int x = 0; x < gridCarWidth; x++)
-    //        {
-    //            carSO = carSOList[UnityEngine.Random.Range(0, carSOList.Count)];
-    //            Car spawnnedCar = Car.Create(gridCar.GetWorldPosition(x, z), carSO);
-    //            spawnnedCar.transform.SetParent( centerVisualParent.transform,false);
-    //            CarObject gridObject = gridCar.GetGridObject(x, z);
-    //            gridObject.SetCarObject(spawnnedCar);
-    //        }
-    //        rowParentVisual.Add(new RowVisualGroup(z, centerVisualParent.transform, carGridTotalWidth, this));
-    //    }
-    //}
     private void InitPassenger()
     {
-        GameObject PassengerGridHolder = new GameObject("PassengerGrid");
-        for (int z = 0; z < gridPassengerHeight; z++)
+        GameObject passengerGrid = new GameObject("PassengerGrid");
+        for (int x = 0; x < gridPassengerWidth; x++)
         {
-            for (int x = 0; x < gridPassengerWidth; x++)
+            GameObject passengerColumn = new GameObject($"Coulmn_{x}");
+            for (int z = 0; z < gridPassengerHeight; z++)
             {
                 passengerSO = passengerSOList[UnityEngine.Random.Range(0, passengerSOList.Count)];
                 Passenger passenger = Passenger.Create(gridPassenger.GetWorldPosition(x, z), passengerSO);
                 PassengerObject gridObject = gridPassenger.GetGridObject(x, z);
-                passenger.transform.SetParent(PassengerGridHolder.transform);
+                passenger.transform.SetParent(passengerColumn.transform);
                 gridObject.SetPassenger(passenger);
             }
+            passengerColumn.transform.SetParent(passengerGrid.transform);
         }
     }
     //Visual manage
@@ -166,8 +138,8 @@ public class GridSystem : MonoBehaviour
             if (carSODict.TryGetValue(carType, out CarSO carSO))
             {
                 car = Car.Create(gridCar.GetWorldPosition(x, z), carSO);
-                car.transform.SetParent(rowParentVisual[z].GetCenterGroup().transform, false);
                 gridObject.SetCar(car);
+                car.transform.SetParent(rowParentGameObject[z].GetCenterGroup().transform, false);
             }
             else
             {
@@ -188,8 +160,44 @@ public class GridSystem : MonoBehaviour
             return;
         }
         UpdateVisualRowAfterShift(e.row);
-
+        gridCar.DebugPrintGridArray();
     }
+    private void GridCar_OnGridColumnVisualChanged(object sender, Grid<CarObject>.OnGridColumnVisualChangedEventArgs e) //co the refactor
+    {
+        if (e.column < 0 || e.column >= gridCarWidth)
+        {
+            Debug.Log("out of index column");
+            return;
+        }
+        for(int i = 0; i < gridCarHeight; i++)
+        {
+            UpdateVisualRowAfterShift(i);
+        }
+        //UpdateVisualColumnAfterShift(e.column);
+        gridCar.DebugPrintGridArray();
+    }
+    //private void UpdateVisualColumnAfterShift(int column)
+    //{
+    //    ClearColumnObjectVisual(column);
+    //    for(int z = 0; z < gridCarHeight; z++)
+    //    {
+    //        CarObject gridObject = gridCar.GetGridObject(column,z);
+    //        Car spawnedCar = Car.Create(gridCar.GetWorldPosition(column,z),gridObject.GetCar().GetSO());
+    //        spawnedCar.transform.SetParent(rowParentGameObject[z].GetCenterGroup(),false);
+    //        OnCenterGroupChange?.Invoke(z);
+    //    }
+    //}
+    //private void ClearColumnObjectVisual(int column)
+    //{
+    //    for (int z = 0; z < gridCarHeight; z++)
+    //    {
+    //        CarObject gridObject = gridCar.GetGridObject(column, z);
+    //        if (gridObject.GetCar() != null)
+    //        {
+    //            gridObject.GetCar().SelfDestroy();
+    //        }
+    //    }
+    //}
     private void UpdateVisualRowAfterShift(int row)
     {
         ClearRowObjectVisual(row);
@@ -197,10 +205,11 @@ public class GridSystem : MonoBehaviour
         {
             CarObject gridObject = gridCar.GetGridObject(x, row);
             Car spawnedCar = Car.Create(gridCar.GetWorldPosition(x, row), gridObject.GetCar().GetSO());
-            spawnedCar.transform.SetParent(rowParentVisual[row].GetCenterGroup(),false);
             gridObject.SetCar(spawnedCar);
+            spawnedCar.transform.SetParent(rowParentGameObject[row].GetCenterGroup(),false);
         }
         OnCenterGroupChange?.Invoke(row);
+
     }
 
     private void ClearRowObjectVisual(int row)
@@ -210,14 +219,14 @@ public class GridSystem : MonoBehaviour
             CarObject gridObject = gridCar.GetGridObject(x, row);
             if (gridObject.GetCar() != null)
             {
-                gridObject.GetCar().SelfDestroy();
+                gridObject.DestroyEntity();
             }
         }
     }
     // GetSet
     public RowVisualGroup GetRowVisualGroup(int row)
     {
-        return rowParentVisual[row];
+        return rowParentGameObject[row];
     }
 
     public Grid<CarObject> GetGrid()

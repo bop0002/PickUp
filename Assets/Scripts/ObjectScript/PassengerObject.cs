@@ -4,16 +4,14 @@ public class PassengerObject : GridObject<Passenger, PassengerSO, PassengerObjec
 {
     public void SetPassenger(Passenger passenger)
     {
-        SetObject(passenger);
+        this.entity = passenger;
+        //grid.TriggerGridObjectChanged(x, z, this);
     }
     public Passenger GetPassenger()
     {
         return (Passenger) GetEntity();
     }
-    public PassengerObject(Grid<PassengerObject> grid, int x, int z) : base(grid, x, z)
+    public PassengerObject(Grid<PassengerObject> grid) : base(grid)
     {
-        this.grid = grid;
-        this.x = x;
-        this.z = z;
     }
 }

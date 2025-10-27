@@ -19,7 +19,7 @@ public class GridDragController : MonoBehaviour
     private int maxShift;
     private int width;
     private int height;
-
+    
     //De trong start vi ben kia init awake co the loi
     private void Start()
     {
@@ -75,7 +75,7 @@ public class GridDragController : MonoBehaviour
                     for (int i = 0; i < shiftCount; i++)
                     {
                         grid.ShiftRowRight(startZ);
-                        Debug.Log($"Shift row {startZ} → {shiftCount} steps Right");
+                        //Debug.Log($"Shift row {startZ} → {shiftCount} steps Right");
                     }
                 }
                 else if (shiftCount < 0)
@@ -83,7 +83,7 @@ public class GridDragController : MonoBehaviour
                     for (int i = 0; i < -shiftCount; i++)
                     {
                         grid.ShiftRowLeft(startZ);
-                        Debug.Log($"Shift row {startZ} ← {-shiftCount} steps Left");
+                        //Debug.Log($"Shift row {startZ} ← {-shiftCount} steps Left");
                     }
                 }
             }
@@ -96,7 +96,7 @@ public class GridDragController : MonoBehaviour
             startMousePos = Mouse3D.GetMouseWorldPosition();
             grid.GetXZ(Mouse3D.GetMouseWorldPosition(), out startX, out startZ);
             gridSystem.TestSpawn(startX, startZ);
-            grid.ShiftColumnUp(startX, 1);
+            grid.ShiftColumnUp(startX, 2);
         }
 
             //if(Input.GetMouseButtonDown(1))

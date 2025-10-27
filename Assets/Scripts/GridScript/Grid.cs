@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 using CodeMonkey.Utils;
 using System;
 using Unity.VisualScripting;
@@ -45,7 +45,7 @@ public class Grid<TGridObject>
     }
 
 
-    public Grid(int width, int height, float cellSize, Vector3 origin,Func<Grid<TGridObject>,int,int,TGridObject> createGridObject)
+    public Grid(int width, int height, float cellSize, Vector3 origin,Func<Grid<TGridObject>,TGridObject> createGridObject)
     {
         this.width = width;
         this.height = height;
@@ -59,7 +59,7 @@ public class Grid<TGridObject>
         {
             for (int z = 0; z < height; z++)
             {
-                gridArray[x, z] = createGridObject(this, x, z);
+                gridArray[x, z] = createGridObject(this);
             }
         }
 
@@ -106,25 +106,51 @@ public class Grid<TGridObject>
         return this.totalWidth;
     }
     //shift cac thu co the refactor thanh linkedlist va queue stack cac thu
-    public void ShiftColumnUp(int column,int shiftCount)
+    public void ShiftColumnUp(int column, int shiftCount)
     {
-        for(int z = 0; z < height;z++)
-        {
-            gridObjectLinkedList.AddFirst(gridArray[column,z]);
-        }
-        for (int i = 0; i < shiftCount; i++)
-        {
-            TGridObject temp = gridObjectLinkedList.First.Value;
-            gridObjectLinkedList.RemoveFirst();
-            gridObjectLinkedList.AddLast(temp);
-        }
+        gridObjectLinkedList.Clear();
         for (int z = 0; z < height; z++)
         {
-            gridArray[column,z] = gridObjectLinkedList.Last.Value;
-            gridObjectLinkedList.RemoveLast();
+            gridObjectLinkedList.AddLast(gridArray[column, z]);
         }
+
+        for (int i = 0; i < shiftCount; i++)
+        {
+            TGridObject temp = gridObjectLinkedList.Last.Value;
+            gridObjectLinkedList.RemoveLast();
+            gridObjectLinkedList.AddFirst(temp);
+        }
+
+        int idx = 0;
+        foreach (TGridObject obj in gridObjectLinkedList)
+        {
+            gridArray[column, idx] = obj;
+            idx++;
+        }
+
         OnGridColumnVisualChanged?.Invoke(this, new OnGridColumnVisualChangedEventArgs(column));
     }
+
+    //public void ShiftColumnUp(int column, int shiftCount)
+    //{
+    //    for (int z = 0; z < height; z++)
+    //    {
+    //        gridObjectLinkedList.AddFirst(gridArray[column, z]);
+    //    }
+    //    for (int i = 0; i < shiftCount; i++)
+    //    {
+    //        TGridObject temp = gridObjectLinkedList.First.Value;
+    //        gridObjectLinkedList.RemoveFirst();
+    //        gridObjectLinkedList.AddLast(temp);
+    //    }
+    //    for (int z = 0; z < height; z++)
+    //    {
+    //        gridArray[column, z] = gridObjectLinkedList.Last.Value;
+    //        gridObjectLinkedList.RemoveLast();
+    //    }
+    //    OnGridColumnVisualChanged?.Invoke(this, new OnGridColumnVisualChangedEventArgs(column));
+    //}
+
     //public void ShiftColumnUp(int column)
     //{
     //    TGridObject tmp = gridArray[column, 0];
@@ -166,12 +192,12 @@ public class Grid<TGridObject>
     }
 
 
-    public void TriggerGridObjectChanged(int x,int z)
+    public void TriggerGridObjectChanged(int x,int z,TGridObject gridObject)
     {
-        OnGridValueChanged?.Invoke(this, new OnGridValueChangedEventArgs(x,z));
+        SetGridObject(x, z, gridObject);
     }
 
-    public void SetGridObject(Vector3 worldposition, TGridObject gridObject)
+    public void SetGridObject(Vector3 worldposition, TGridObject gridObject) // test
     {
         int x, z;
         GetXZ(worldposition, out x, out z);
@@ -209,4 +235,29 @@ public class Grid<TGridObject>
         x = Mathf.FloorToInt((worldPosition - origin ).x / cellSize);
         z = Mathf.FloorToInt((worldPosition - origin).z / cellSize);   
     }
+
+    public void DebugPrintGridArray()
+    {
+        System.Text.StringBuilder sb = new System.Text.StringBuilder();
+        sb.AppendLine("=== GRID STATE (Bottom → Top) ===");
+
+        for (int z = height - 1; z >= 0; z--)
+        {
+            sb.Append($"Row {z:D2} | ");
+            for (int x = 0; x < width; x++)
+            {
+                var obj = gridArray[x, z];
+                string text = obj != null ? obj.ToString() : "null";
+                text = text.Replace("(Clone)", "");
+                sb.Append($"[{text}]".PadRight(28));
+            }
+            sb.AppendLine();
+        }
+
+        Debug.Log(sb.ToString());
+    }
+
+
+
+
 }
