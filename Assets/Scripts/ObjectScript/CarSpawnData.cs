@@ -2,7 +2,8 @@ using NUnit.Framework;
 using System.Collections.Generic;
 using UnityEngine;
 [System.Serializable]
-public class CarSpawnData
+public class SpawnData
 {
-    public List<CarSpawnDataColumn> columns;
+    public List<SpawnDataColumn> carColumns;
+    public List<SpawnDataColumn> passengerColumns;
 }

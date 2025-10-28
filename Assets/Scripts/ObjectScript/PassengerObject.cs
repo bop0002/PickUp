@@ -4,8 +4,7 @@ public class PassengerObject : GridObject<Passenger, PassengerSO, PassengerObjec
 {
     public void SetPassenger(Passenger passenger)
     {
-        this.entity = passenger;
-        //grid.TriggerGridObjectChanged(x, z, this);
+        SetObject(passenger);
     }
     public Passenger GetPassenger()
     {

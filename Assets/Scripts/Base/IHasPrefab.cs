@@ -1,6 +1,7 @@
 using UnityEngine;
 
-public interface IHasPrefab 
+public interface ISO 
 {
     public GameObject GetPrefab();
+    public EColor GetColor();
 }

@@ -93,21 +93,18 @@ public class GridDragController : MonoBehaviour
         //test shift and spawn column
         if (Input.GetMouseButtonDown(1))
         {
-            startMousePos = Mouse3D.GetMouseWorldPosition();
-            grid.GetXZ(Mouse3D.GetMouseWorldPosition(), out startX, out startZ);
-            gridSystem.TestSpawn(startX, startZ);
-            grid.ShiftColumnUp(startX, 2);
+            gridSystem.TestSpawn();
         }
 
-            //if(Input.GetMouseButtonDown(1))
-            //{
-            //    startMousePos = Mouse3D.GetMouseWorldPosition();
-            //    grid.GetXZ(Mouse3D.GetMouseWorldPosition(), out startX, out startZ);
-            //    if (startX >= 0 && startX < width && startZ < height && startZ >= 0)
-            //    {
-            //        grid.ShiftColumnUp(startX, 1);
-            //    }
-            //}
+        //if(Input.GetMouseButtonDown(1))
+        //{
+        //    startMousePos = Mouse3D.GetMouseWorldPosition();
+        //    grid.GetXZ(Mouse3D.GetMouseWorldPosition(), out startX, out startZ);
+        //    if (startX >= 0 && startX < width && startZ < height && startZ >= 0)
+        //    {
+        //        grid.ShiftColumnUp(startX, 1);
+        //    }
+        //}
 
     }
 }

@@ -11,8 +11,12 @@ public class GridSystem : MonoBehaviour
     [SerializeField] private List<CarSO> carSOList;
     private Dictionary<ECarType, CarSO> carSODict;
     [SerializeField] private List<PassengerSO> passengerSOList;
+    private Dictionary<EColor, PassengerSO> passengerSODict;
+    private List<GameObject> passengerColumns;
     private List<EColor> carTypeSOList;
     private List<RowVisualGroup> rowParentGameObject;
+    private int[] departIndexPassenger = { 0, 1, 2 };
+    private int[] departIndexCar = { 0, 2, 4 };
     private CarSO carSO;
     private PassengerSO passengerSO;
     private Grid<CarObject> gridCar;
@@ -26,9 +30,12 @@ public class GridSystem : MonoBehaviour
     private Vector3 gridCarOrigin;
     private Vector3 gridPassengerOrigin;
     private float carGridTotalWidth;
-    private CarSpawnData carSpawnData;
+    private SpawnData spawnData;
     public event Action<int> OnCenterGroupChange;
-    
+
+    string folderSpawnPath;
+    string fileSpawnPath;
+    string json;
     private void Awake()
     {
         InitDict();
@@ -42,6 +49,11 @@ public class GridSystem : MonoBehaviour
         {
             carSODict[so.GetCarType()] = so;
         }
+        passengerSODict = new Dictionary<EColor, PassengerSO>();
+        foreach(var so in passengerSOList)
+        {
+            passengerSODict[so.GetColor()] = so;
+        }
     }
     private void Init()
     {
@@ -53,29 +65,33 @@ public class GridSystem : MonoBehaviour
 
         gridPassengerWidth = 3;
         gridPassengerHeight = 6;
-        gridPassengerCellSize = 2.65f ;
+        gridPassengerCellSize = 2.65f;
         gridPassengerOrigin = new Vector3(-4f, 0, -3f);
 
 
         gridCar = new Grid<CarObject>(gridCarWidth, gridCarHeight, gridCarCellSize, gridCarOrigin, (Grid<CarObject> g) => new CarObject(g));
-        gridPassenger = new Grid<PassengerObject> (gridPassengerWidth,gridPassengerHeight ,gridPassengerCellSize,gridPassengerOrigin,(Grid<PassengerObject> g) => new PassengerObject(g));
+        gridPassenger = new Grid<PassengerObject>(gridPassengerWidth, gridPassengerHeight, gridPassengerCellSize, gridPassengerOrigin, (Grid<PassengerObject> g) => new PassengerObject(g));
         carSO = carSOList[0];
         passengerSO = passengerSOList[0];
         rowParentGameObject = new List<RowVisualGroup>();
-        
+        passengerColumns = new List<GameObject>();
+
+        folderSpawnPath = Path.Combine(Application.streamingAssetsPath, "LevelPattern");
+        fileSpawnPath = Path.Combine(folderSpawnPath, "level1.json");
+        json = File.ReadAllText(fileSpawnPath);
+        spawnData = JsonUtility.FromJson<SpawnData>(json);
 
         gridCar.OnGridRowVisualChanged += Grid_OnGridRowVisualChanged;
         gridCar.OnGridColumnVisualChanged += GridCar_OnGridColumnVisualChanged;
+        gridPassenger.OnGridColumnVisualChanged += GridPassenger_OnGridColumnVisualChanged;
+
         InitCarFile();
         InitPassenger();
     }
+
+
     private void InitCarFile()
     {
-        string folderPath = Path.Combine(Application.streamingAssetsPath, "LevelPattern");
-        string filePath = Path.Combine(folderPath, "level1.json");
-
-        string json = File.ReadAllText(filePath);
-        carSpawnData = JsonUtility.FromJson<CarSpawnData>(json);
         for (int z = 0; z < gridCarHeight; z++)
         {
             GameObject rowVisualParent = new GameObject($"Row_{z}");
@@ -84,25 +100,13 @@ public class GridSystem : MonoBehaviour
             centerVisualParent.transform.SetParent(rowVisualParent.transform);
             for (int x = 0; x < gridCarWidth; x++)
             {
-                string enumString = carSpawnData.columns[x].pattern[carSpawnData.columns[x].indexCount++];
-                if (Enum.TryParse(enumString, out ECarType carType))
+                CarSO carSO = GetNextCarSO(x);
+                if(carSO!= null)
                 {
-                    if (carSODict.TryGetValue(carType, out CarSO carSO))
-                    {
-                        Debug.Log($"JSON content:\n{carSpawnData.columns[x].columnIndex}");
-                        Car spawnnedCar = Car.Create(gridCar.GetWorldPosition(x, z), carSO);
-                        spawnnedCar.transform.SetParent(centerVisualParent.transform, false);
-                        CarObject gridObject = gridCar.GetGridObject(x, z);
-                        gridObject.SetCar(spawnnedCar);
-                    }
-                    else
-                    {
-                        Debug.Log("Cant find carSO");
-                    }
-                }
-                else
-                {
-                    Debug.Log("Cant parse enum");
+                    Car spawnnedCar = Car.Create(gridCar.GetWorldPosition(x, z), carSO);
+                    spawnnedCar.transform.SetParent(centerVisualParent.transform, false);
+                    CarObject gridObject = gridCar.GetGridObject(x, z);
+                    gridObject.SetCar(spawnnedCar);
                 }
             }
             rowParentGameObject.Add(new RowVisualGroup(z, centerVisualParent.transform, carGridTotalWidth, this));
@@ -117,29 +121,38 @@ public class GridSystem : MonoBehaviour
             GameObject passengerColumn = new GameObject($"Coulmn_{x}");
             for (int z = 0; z < gridPassengerHeight; z++)
             {
-                passengerSO = passengerSOList[UnityEngine.Random.Range(0, passengerSOList.Count)];
-                Passenger passenger = Passenger.Create(gridPassenger.GetWorldPosition(x, z), passengerSO);
-                PassengerObject gridObject = gridPassenger.GetGridObject(x, z);
-                passenger.transform.SetParent(passengerColumn.transform);
-                gridObject.SetPassenger(passenger);
+                passengerSO = GetNextPassengerSO(x);
+                if(passengerSO!= null)
+                {
+                    Passenger passenger = Passenger.Create(gridPassenger.GetWorldPosition(x, z), passengerSO);
+                    PassengerObject passengerObject = gridPassenger.GetGridObject(x, z);
+                    passenger.transform.SetParent(passengerColumn.transform, false);
+                    passengerObject.SetPassenger(passenger);
+                }
+                else
+                {
+                    Debug.Log("Error init passengerSO = null Init");
+                }
             }
-            passengerColumn.transform.SetParent(passengerGrid.transform);
+            passengerColumns.Add(passengerColumn);
+            passengerColumn.transform.SetParent(passengerGrid.transform,false);
         }
     }
-    //Visual manage
-    public void TestSpawn(int x,int z)
+    private PassengerSO GetNextPassengerSO(int x)
     {
-        CarObject gridObject = gridCar.GetGridObject(x, z);
-        Car car = gridObject.GetCar();
-        car.SelfDestroy();
-        string enumString = carSpawnData.columns[x].pattern[carSpawnData.columns[x].indexCount++];
-        if (Enum.TryParse(enumString, out ECarType carType))
+        SpawnDataColumn columnData = spawnData.passengerColumns[x];
+        if (columnData.indexCount >= columnData.pattern.Count)
         {
-            if (carSODict.TryGetValue(carType, out CarSO carSO))
+            Debug.Log("out of index in json passenger");
+            return null;
+        }
+        string enumString = columnData.pattern[spawnData.carColumns[x].indexCount++];
+        if (Enum.TryParse(enumString, out EColor passengerColor))
+        {
+            if (passengerSODict.TryGetValue(passengerColor, out PassengerSO passengerSO))
             {
-                car = Car.Create(gridCar.GetWorldPosition(x, z), carSO);
-                gridObject.SetCar(car);
-                car.transform.SetParent(rowParentGameObject[z].GetCenterGroup().transform, false);
+                Debug.Log($"JSON content Passenger:\n{columnData.columnIndex}");
+                return passengerSO;
             }
             else
             {
@@ -150,8 +163,136 @@ public class GridSystem : MonoBehaviour
         {
             Debug.Log("Cant parse enum");
         }
+        return null;
+    }
+    private CarSO GetNextCarSO(int x)
+    {
+        SpawnDataColumn columnData = spawnData.carColumns[x];
+        if (columnData.indexCount >= columnData.pattern.Count)
+        {
+            Debug.Log("out of index in json car");
+            return null;
+        }
+        string enumString = columnData.pattern[spawnData.carColumns[x].indexCount++];
+        if (Enum.TryParse(enumString, out ECarType carType))
+        {
+            if (carSODict.TryGetValue(carType, out CarSO carSO))
+            {
+                Debug.Log($"JSON content Car:\n{columnData.columnIndex}");
+                return carSO;
+            }
+            else
+            {
+                Debug.Log("Cant find carSO");
+            }
+        }
+        else
+        {
+            Debug.Log("Cant parse enum");
+        }
+        return null;
 
     }
+    //Visual manage
+    //public void TestSpawn(int x, int z)
+    //{
+    //    CarObject carObject = gridCar.GetGridObject(x, z);
+    //    carObject.ClearObject();
+    //    CarSO carSO = GetNextCarSO(x);
+    //    if (carSO != null)
+    //    {
+    //        Car car = Car.Create(gridCar.GetWorldPosition(x, z), carSO);
+    //        carObject.SetCar(car);
+    //        car.transform.SetParent(rowParentGameObject[z].GetCenterGroup().transform, false); Debug.Log("Cant parse enum");
+    //    }
+    //}
+    public void TestSpawn()
+    {
+        CarObject[,] carArray = gridCar.GetGridArray();
+        PassengerObject[,] passengerArray = gridPassenger.GetGridArray();
+        int countCarDepart;
+        int countPassengerDepart;
+        int passengerHeight = gridPassengerHeight - 1;
+        int carHeight = gridCarHeight - 1;
+        int carZ;
+        int passengerZ;
+        for (int i = 0; i < departIndexPassenger.Length; i++)
+        {
+            for (int j = 0; j < departIndexCar.Length; j++)
+            {
+                countCarDepart = 0;
+                countPassengerDepart = 0;
+                carZ = carHeight - countCarDepart;
+                passengerZ = passengerHeight - countPassengerDepart;
+                if (carArray[departIndexCar[j], carZ].GetColor() == passengerArray[departIndexPassenger[i], passengerZ].GetColor())
+                {
+                    while (carArray[departIndexCar[j], carZ].GetColor() == passengerArray[departIndexPassenger[i], passengerZ].GetColor())
+                    {
+                        Passenger passenger = Passenger.Create(gridPassenger.GetWorldPosition(departIndexPassenger[i], passengerZ), GetNextPassengerSO(departIndexPassenger[i]));
+                        PassengerObject passengerObject = gridPassenger.GetGridObject(departIndexPassenger[i], passengerZ);
+                        passengerObject.ClearObject();
+                        passengerObject.SetPassenger(passenger);
+                        countPassengerDepart++;
+                        passengerZ = passengerHeight - countPassengerDepart;
+                    }
+                    Car car = Car.Create(gridCar.GetWorldPosition(departIndexCar[j], carZ), GetNextCarSO(departIndexCar[j]));
+                    CarObject carObject = gridCar.GetGridObject(departIndexCar[j], carZ);
+                    carObject.ClearObject();
+                    carObject.SetCar(car);
+                    countCarDepart++;
+                    carZ = carHeight - countCarDepart;
+                }
+                if (countCarDepart > 0)
+                {
+                    gridCar.ShiftColumnUp(departIndexCar[j],countCarDepart);
+                }
+                if(countPassengerDepart > 0)
+                {
+                    gridPassenger.ShiftColumnUp(departIndexPassenger[i],countPassengerDepart);
+                }
+            }
+        }
+    }
+    //Passenger
+    private void GridPassenger_OnGridColumnVisualChanged(object sender, Grid<PassengerObject>.OnGridColumnVisualChangedEventArgs e)
+    {
+        if (e.column < 0 || e.column >= gridPassengerWidth)
+        {
+            Debug.Log("out of index column");
+            return;
+        }
+        for (int i = 0; i < gridPassengerHeight; i++)
+        {
+            UpdateVisualPassengerRowAfterShift(i);
+        }
+        gridPassenger.DebugPrintGridArray();
+    }
+    private void UpdateVisualPassengerRowAfterShift(int row)
+    {
+        ClearRowPassengerVisual(row);
+        for (int x = 0; x < gridPassengerWidth; x++)
+        {
+            PassengerObject passengerObject = gridPassenger.GetGridObject(x, row);
+            Passenger passenger = Passenger.Create(gridPassenger.GetWorldPosition(x, row), passengerObject.GetPassenger().GetSO());
+            passenger.transform.SetParent(passengerColumns[x].transform, false);
+            passengerObject.SetObject(passenger);
+        }
+        
+
+    }
+    private void ClearRowPassengerVisual(int row)
+    {
+        for (int x = 0; x < gridPassengerWidth; x++)
+        {
+            PassengerObject passengerObject = gridPassenger.GetGridObject(x, row);
+            if (passengerObject.GetPassenger() != null)
+            {
+                passengerObject.ClearObject();
+            }
+        }
+    }
+    //Car
+
     private void Grid_OnGridRowVisualChanged(object sender, Grid<CarObject>.OnGridRowVisualChangedEventArgs e)
     {
         if (e.row < 0 || e.row >= gridCarHeight)
@@ -176,6 +317,31 @@ public class GridSystem : MonoBehaviour
         //UpdateVisualColumnAfterShift(e.column);
         gridCar.DebugPrintGridArray();
     }
+    private void UpdateVisualRowAfterShift(int row)
+    {
+        ClearRowObjectVisual(row);
+        for (int x = 0; x < gridCarWidth; x++)
+        {
+            CarObject carObject = gridCar.GetGridObject(x, row);
+            Car spawnedCar = Car.Create(gridCar.GetWorldPosition(x, row), carObject.GetCar().GetSO());
+            carObject.SetCar(spawnedCar);
+            spawnedCar.transform.SetParent(rowParentGameObject[row].GetCenterGroup(),false);
+        }
+        OnCenterGroupChange?.Invoke(row);
+
+    }
+
+    private void ClearRowObjectVisual(int row)
+    {
+        for (int x = 0; x < gridCarWidth; x++)
+        {
+            CarObject carObject = gridCar.GetGridObject(x, row);
+            if (carObject.GetCar() != null)
+            {
+                carObject.ClearObject();
+            }
+        }
+    }
     //private void UpdateVisualColumnAfterShift(int column)
     //{
     //    ClearColumnObjectVisual(column);
@@ -198,31 +364,6 @@ public class GridSystem : MonoBehaviour
     //        }
     //    }
     //}
-    private void UpdateVisualRowAfterShift(int row)
-    {
-        ClearRowObjectVisual(row);
-        for (int x = 0; x < gridCarWidth; x++)
-        {
-            CarObject gridObject = gridCar.GetGridObject(x, row);
-            Car spawnedCar = Car.Create(gridCar.GetWorldPosition(x, row), gridObject.GetCar().GetSO());
-            gridObject.SetCar(spawnedCar);
-            spawnedCar.transform.SetParent(rowParentGameObject[row].GetCenterGroup(),false);
-        }
-        OnCenterGroupChange?.Invoke(row);
-
-    }
-
-    private void ClearRowObjectVisual(int row)
-    {
-        for (int x = 0; x < gridCarWidth; x++)
-        {
-            CarObject gridObject = gridCar.GetGridObject(x, row);
-            if (gridObject.GetCar() != null)
-            {
-                gridObject.DestroyEntity();
-            }
-        }
-    }
     // GetSet
     public RowVisualGroup GetRowVisualGroup(int row)
     {

@@ -1,7 +1,7 @@
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "PassengerSO", menuName = "ScriptableObject/PassengerSO")]
-public class PassengerSO : ScriptableObject,IHasPrefab
+public class PassengerSO : ScriptableObject,ISO
 {
     [SerializeField] private string objectName;
     [SerializeField] private EColor color;
@@ -11,5 +11,8 @@ public class PassengerSO : ScriptableObject,IHasPrefab
     {
         return prefab;
     }
-
+    public EColor GetColor()
+    {
+        return color;
+    }
 }

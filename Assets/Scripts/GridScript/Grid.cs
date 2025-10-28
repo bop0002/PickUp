@@ -88,6 +88,8 @@ public class Grid<TGridObject>
 
         };
     }
+    public TGridObject[,] GetGridArray()
+        { return gridArray; }
     public float GetCellSize()
     {
         return this.cellSize;

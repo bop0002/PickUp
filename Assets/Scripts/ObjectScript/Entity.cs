@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public abstract class Entity<TDataSO> : MonoBehaviour where TDataSO : IHasPrefab
+public abstract class Entity<TDataSO> : MonoBehaviour where TDataSO : ISO
 {
     protected TDataSO dataSO;
     public static T Create<T>(Vector3 worldPosition, TDataSO dataSO) where T : Entity<TDataSO>
@@ -15,7 +15,10 @@ public abstract class Entity<TDataSO> : MonoBehaviour where TDataSO : IHasPrefab
     {
         return dataSO;
     }
-
+    public EColor GetColor()
+    {
+        return dataSO.GetColor();
+    }
     public void SelfDestroy() //hoac la delay 1 frame roi moi update sideVisual who know hoac la destyroy immediate
     {
         Destroy(this.gameObject);

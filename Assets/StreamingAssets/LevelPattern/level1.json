@@ -1,5 +1,5 @@
 {
-    "columns": [
+    "carColumns": [
         {
             "columnIndex": "0",
             "pattern": [
@@ -50,5 +50,40 @@
             ],
             "indexCount": 0
         }
+    ],
+    "passengerColumns": 
+    [
+        {
+            "columnIndex": 0,
+            "pattern": [
+                "RED","GREEN","BLUE","RED","GREEN","BLUE",
+                "RED","GREEN","BLUE","RED","GREEN","BLUE",
+                "RED","GREEN","BLUE","RED","GREEN","BLUE",
+                "RED","GREEN","BLUE","RED","GREEN","BLUE"
+            ],
+            "indexCount": 0
+        },
+        {
+            "columnIndex": 1,
+            "pattern": [
+                "BLUE","RED","GREEN","BLUE","RED","GREEN",
+                "BLUE","RED","GREEN","BLUE","RED","GREEN",
+                "BLUE","RED","GREEN","BLUE","RED","GREEN",
+                "BLUE","RED","GREEN","BLUE","RED","GREEN"
+            ],
+            "indexCount": 0
+        },
+        {
+            "columnIndex": 2,
+            "pattern": [
+                "GREEN","BLUE","RED","GREEN","BLUE","RED",
+                "GREEN","BLUE","RED","GREEN","BLUE","RED",
+                "GREEN","BLUE","RED","GREEN","BLUE","RED",
+                "GREEN","BLUE","RED","GREEN","BLUE","RED"
+            ],
+            "indexCount": 0
+        }
     ]
+
+
 }

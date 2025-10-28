@@ -2,32 +2,29 @@ using UnityEngine;
 using static GridSystem;
 using static UnityEngine.EventSystems.EventTrigger;
 
-public abstract class GridObject<TGridObject,TDataSO,TChild> where TDataSO : IHasPrefab where TChild : GridObject<TGridObject, TDataSO, TChild>
+public abstract class GridObject<TGridObject,TDataSO,TChild> where TDataSO : ISO where TChild : GridObject<TGridObject, TDataSO, TChild>
 {
     protected Grid<TChild> grid;
     protected Entity<TDataSO> entity;
 
-    //public void SetObject(Entity<TDataSO> entity)
-    //{
-    //    this.entity = entity;
-    //    grid.TriggerGridObjectChanged(x, z);
-    //}
-    public void DestroyEntity()
+    public void SetObject(Entity<TDataSO> entity)
     {
-        entity.SelfDestroy();
+        this.entity = entity;
+        //grid.TriggerGridObjectChanged(x, z);
     }
     public Entity<TDataSO> GetEntity()
     {
         return this.entity;
     }
-
-    //public void ClearObject()
-    //{
-    //    entity = null;
-    //    grid.TriggerGridObjectChanged(x, z);
-
-    //}
-
+    public EColor GetColor()
+    {
+        return entity.GetColor();
+    }
+    public void ClearObject()
+    {
+        entity.SelfDestroy();
+    }
+    
     public bool CanBuild()
     {
         return this.entity == null;

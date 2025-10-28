@@ -5,8 +5,9 @@ public class CarObject : GridObject<Car,CarSO,CarObject>
 {
     public void SetCar(Car placeCar)
     {
-        this.entity = placeCar;
-        //grid.TriggerGridObjectChanged(x, z, this);
+        //this.entity = placeCar;
+        ////grid.TriggerGridObjectChanged(x, z, this);
+        SetObject(placeCar);
     }
 
     public Car GetCar()

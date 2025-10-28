@@ -1,7 +1,7 @@
 using UnityEngine;
 
 [CreateAssetMenu(menuName ="ScriptableObject/CarScriptableObject")] 
-public class CarSO : ScriptableObject,IHasPrefab
+public class CarSO : ScriptableObject,ISO
 {
     [SerializeField] private string objectName;
     [SerializeField] private int seat;
@@ -13,6 +13,10 @@ public class CarSO : ScriptableObject,IHasPrefab
     public GameObject GetPrefab()
     {
         return prefab;
+    }
+    public EColor GetColor()
+    {
+        return color;
     }
 
 }
