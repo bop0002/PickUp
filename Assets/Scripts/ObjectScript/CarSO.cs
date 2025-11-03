@@ -10,6 +10,10 @@ public class CarSO : ScriptableObject,ISO
     [SerializeField] private GameObject prefab;
 
     public ECarType GetCarType() { return carType; }
+    public int GetSeatSlot()
+    {
+        return seat;
+    }
     public GameObject GetPrefab()
     {
         return prefab;

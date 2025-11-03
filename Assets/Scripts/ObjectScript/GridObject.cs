@@ -37,7 +37,7 @@ public abstract class GridObject<TGridObject,TDataSO,TChild> where TDataSO : ISO
     override
     public string ToString()
     {
-        return entity+ ",";
+        return entity.ToString()+ ",";
     }
 
 }

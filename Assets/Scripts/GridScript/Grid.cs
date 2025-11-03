@@ -110,6 +110,10 @@ public class Grid<TGridObject>
     //shift cac thu co the refactor thanh linkedlist va queue stack cac thu
     public void ShiftColumnUp(int column, int shiftCount)
     {
+        if(shiftCount<=0)
+        {
+            return;
+        }
         gridObjectLinkedList.Clear();
         for (int z = 0; z < height; z++)
         {
@@ -133,51 +137,23 @@ public class Grid<TGridObject>
         OnGridColumnVisualChanged?.Invoke(this, new OnGridColumnVisualChangedEventArgs(column));
     }
 
-    //public void ShiftColumnUp(int column, int shiftCount)
-    //{
-    //    for (int z = 0; z < height; z++)
-    //    {
-    //        gridObjectLinkedList.AddFirst(gridArray[column, z]);
-    //    }
-    //    for (int i = 0; i < shiftCount; i++)
-    //    {
-    //        TGridObject temp = gridObjectLinkedList.First.Value;
-    //        gridObjectLinkedList.RemoveFirst();
-    //        gridObjectLinkedList.AddLast(temp);
-    //    }
-    //    for (int z = 0; z < height; z++)
-    //    {
-    //        gridArray[column, z] = gridObjectLinkedList.Last.Value;
-    //        gridObjectLinkedList.RemoveLast();
-    //    }
-    //    OnGridColumnVisualChanged?.Invoke(this, new OnGridColumnVisualChangedEventArgs(column));
-    //}
+    public void ShiftColumnUp(int column)
+    {
+        TGridObject tmp = gridArray[column, height - 1];
+        for (int z = height - 1; z > 0; z--)
+        {
+            gridArray[column, z] = gridArray[column, z - 1];
+        }
+        gridArray[column, 0] = tmp;
+        OnGridColumnVisualChanged?.Invoke(this, new OnGridColumnVisualChangedEventArgs(column));
+    }
 
-    //public void ShiftColumnUp(int column)
-    //{
-    //    TGridObject tmp = gridArray[column, 0];
-    //    for (int row = 0; row < height - 1; row++)
-    //    {
-    //        gridArray[column, row] = gridArray[column, row + 1];
-    //    }
-    //    gridArray[column, height - 1] = tmp;
-    //}
-
-    //public void ShiftColumnDown(int column)
-    //{
-    //    TGridObject tmp = gridArray[column, height - 1];
-    //    for (int row = height - 1; row > 0; row--)
-    //    {
-    //        gridArray[column, row] = gridArray[column, row - 1];
-    //    }
-    //    gridArray[column, 0] = tmp;
-    //}
     public void ShiftRowRight(int row)
     {
         TGridObject tmp = gridArray[width - 1, row];
-        for (int column = width - 1; column > 0; column--)
+        for (int x = width - 1; x > 0; x--)
         {
-            gridArray[column, row] = gridArray[column - 1, row];
+            gridArray[x, row] = gridArray[x - 1, row];
         }
         gridArray[0, row] = tmp;
         OnGridRowVisualChanged?.Invoke(this, new OnGridRowVisualChangedEventArgs(row));
@@ -185,9 +161,9 @@ public class Grid<TGridObject>
     public void ShiftRowLeft(int row)
     {
         TGridObject tmp = gridArray[0,row];
-        for(int column = 0; column < width-1; column++)
+        for(int x = 0; x < width-1; x++)
         {
-            gridArray[column, row] = gridArray[column+1, row];
+            gridArray[x, row] = gridArray[x+1, row];
         }
         gridArray[width - 1,row] = tmp;
         OnGridRowVisualChanged?.Invoke(this, new OnGridRowVisualChangedEventArgs(row));

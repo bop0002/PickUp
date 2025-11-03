@@ -3,86 +3,208 @@
         {
             "columnIndex": "0",
             "pattern": [
-                "FOUR_RED","FOUR_GREEN","FOUR_BLUE","FOUR_RED","FOUR_GREEN",
-                "FOUR_BLUE","FOUR_RED","FOUR_GREEN","FOUR_BLUE","FOUR_RED",
-                "FOUR_GREEN","FOUR_BLUE","FOUR_RED","FOUR_GREEN","FOUR_BLUE",
-                "FOUR_RED","FOUR_GREEN","FOUR_BLUE","FOUR_RED","FOUR_GREEN"
+                "FOUR_RED","FOUR_GREEN","FOUR_BLUE","FOUR_YELLOW","FOUR_RED",
+                "FOUR_GREEN","FOUR_BLUE","FOUR_YELLOW","FOUR_RED","FOUR_GREEN",
+                "FOUR_BLUE","FOUR_YELLOW","FOUR_RED","FOUR_GREEN","FOUR_BLUE",
+                "FOUR_YELLOW","FOUR_RED","FOUR_GREEN","FOUR_BLUE","FOUR_YELLOW",
+
+                "FOUR_RED","FOUR_GREEN","FOUR_BLUE","FOUR_YELLOW","FOUR_RED",
+                "FOUR_GREEN","FOUR_BLUE","FOUR_YELLOW","FOUR_RED","FOUR_GREEN",
+                "FOUR_BLUE","FOUR_YELLOW","FOUR_RED","FOUR_GREEN","FOUR_BLUE",
+                "FOUR_YELLOW","FOUR_RED","FOUR_GREEN","FOUR_BLUE","FOUR_YELLOW",
+
+                "FOUR_RED","FOUR_GREEN","FOUR_BLUE","FOUR_YELLOW","FOUR_RED",
+                "FOUR_GREEN","FOUR_BLUE","FOUR_YELLOW","FOUR_RED","FOUR_GREEN",
+                "FOUR_BLUE","FOUR_YELLOW","FOUR_RED","FOUR_GREEN","FOUR_BLUE",
+                "FOUR_YELLOW","FOUR_RED","FOUR_GREEN","FOUR_BLUE","FOUR_YELLOW",
+
+                "FOUR_RED","FOUR_GREEN","FOUR_BLUE","FOUR_YELLOW","FOUR_RED",
+                "FOUR_GREEN","FOUR_BLUE","FOUR_YELLOW","FOUR_RED","FOUR_GREEN",
+                "FOUR_BLUE","FOUR_YELLOW","FOUR_RED","FOUR_GREEN","FOUR_BLUE",
+                "FOUR_YELLOW","FOUR_RED","FOUR_GREEN","FOUR_BLUE","FOUR_YELLOW",
+
+                "FOUR_RED","FOUR_GREEN","FOUR_BLUE","FOUR_YELLOW","FOUR_RED",
+                "FOUR_GREEN","FOUR_BLUE","FOUR_YELLOW","FOUR_RED","FOUR_GREEN",
+                "FOUR_BLUE","FOUR_YELLOW","FOUR_RED","FOUR_GREEN","FOUR_BLUE",
+                "FOUR_YELLOW","FOUR_RED","FOUR_GREEN","FOUR_BLUE","FOUR_YELLOW"
             ],
             "indexCount": 0
         },
         {
             "columnIndex": "1",
             "pattern": [
-                "FOUR_BLUE","FOUR_RED","FOUR_GREEN","FOUR_BLUE","FOUR_RED",
-                "FOUR_GREEN","FOUR_BLUE","FOUR_RED","FOUR_GREEN","FOUR_BLUE",
-                "FOUR_RED","FOUR_GREEN","FOUR_BLUE","FOUR_RED","FOUR_GREEN",
-                "FOUR_BLUE","FOUR_RED","FOUR_GREEN","FOUR_BLUE","FOUR_RED"
+                "FOUR_BLUE","FOUR_RED","FOUR_GREEN","FOUR_YELLOW","FOUR_BLUE",
+                "FOUR_RED","FOUR_GREEN","FOUR_YELLOW","FOUR_BLUE","FOUR_RED",
+                "FOUR_GREEN","FOUR_YELLOW","FOUR_BLUE","FOUR_RED","FOUR_GREEN",
+                "FOUR_YELLOW","FOUR_BLUE","FOUR_RED","FOUR_GREEN","FOUR_YELLOW",
+
+                "FOUR_BLUE","FOUR_RED","FOUR_GREEN","FOUR_YELLOW","FOUR_BLUE",
+                "FOUR_RED","FOUR_GREEN","FOUR_YELLOW","FOUR_BLUE","FOUR_RED",
+                "FOUR_GREEN","FOUR_YELLOW","FOUR_BLUE","FOUR_RED","FOUR_GREEN",
+                "FOUR_YELLOW","FOUR_BLUE","FOUR_RED","FOUR_GREEN","FOUR_YELLOW",
+
+                "FOUR_BLUE","FOUR_RED","FOUR_GREEN","FOUR_YELLOW","FOUR_BLUE",
+                "FOUR_RED","FOUR_GREEN","FOUR_YELLOW","FOUR_BLUE","FOUR_RED",
+                "FOUR_GREEN","FOUR_YELLOW","FOUR_BLUE","FOUR_RED","FOUR_GREEN",
+                "FOUR_YELLOW","FOUR_BLUE","FOUR_RED","FOUR_GREEN","FOUR_YELLOW",
+
+                "FOUR_BLUE","FOUR_RED","FOUR_GREEN","FOUR_YELLOW","FOUR_BLUE",
+                "FOUR_RED","FOUR_GREEN","FOUR_YELLOW","FOUR_BLUE","FOUR_RED",
+                "FOUR_GREEN","FOUR_YELLOW","FOUR_BLUE","FOUR_RED","FOUR_GREEN",
+                "FOUR_YELLOW","FOUR_BLUE","FOUR_RED","FOUR_GREEN","FOUR_YELLOW",
+
+                "FOUR_BLUE","FOUR_RED","FOUR_GREEN","FOUR_YELLOW","FOUR_BLUE",
+                "FOUR_RED","FOUR_GREEN","FOUR_YELLOW","FOUR_BLUE","FOUR_RED",
+                "FOUR_GREEN","FOUR_YELLOW","FOUR_BLUE","FOUR_RED","FOUR_GREEN",
+                "FOUR_YELLOW","FOUR_BLUE","FOUR_RED","FOUR_GREEN","FOUR_YELLOW"
             ],
             "indexCount": 0
         },
         {
             "columnIndex": "2",
             "pattern": [
-                "FOUR_GREEN","FOUR_BLUE","FOUR_RED","FOUR_GREEN","FOUR_BLUE",
-                "FOUR_RED","FOUR_GREEN","FOUR_BLUE","FOUR_RED","FOUR_GREEN",
-                "FOUR_BLUE","FOUR_RED","FOUR_GREEN","FOUR_BLUE","FOUR_RED",
-                "FOUR_GREEN","FOUR_BLUE","FOUR_RED","FOUR_GREEN","FOUR_BLUE"
+                "FOUR_GREEN","FOUR_BLUE","FOUR_RED","FOUR_YELLOW","FOUR_GREEN",
+                "FOUR_BLUE","FOUR_RED","FOUR_YELLOW","FOUR_GREEN","FOUR_BLUE",
+                "FOUR_RED","FOUR_YELLOW","FOUR_GREEN","FOUR_BLUE","FOUR_RED",
+                "FOUR_YELLOW","FOUR_GREEN","FOUR_BLUE","FOUR_RED","FOUR_YELLOW",
+
+                "FOUR_GREEN","FOUR_BLUE","FOUR_RED","FOUR_YELLOW","FOUR_GREEN",
+                "FOUR_BLUE","FOUR_RED","FOUR_YELLOW","FOUR_GREEN","FOUR_BLUE",
+                "FOUR_RED","FOUR_YELLOW","FOUR_GREEN","FOUR_BLUE","FOUR_RED",
+                "FOUR_YELLOW","FOUR_GREEN","FOUR_BLUE","FOUR_RED","FOUR_YELLOW",
+
+                "FOUR_GREEN","FOUR_BLUE","FOUR_RED","FOUR_YELLOW","FOUR_GREEN",
+                "FOUR_BLUE","FOUR_RED","FOUR_YELLOW","FOUR_GREEN","FOUR_BLUE",
+                "FOUR_RED","FOUR_YELLOW","FOUR_GREEN","FOUR_BLUE","FOUR_RED",
+                "FOUR_YELLOW","FOUR_GREEN","FOUR_BLUE","FOUR_RED","FOUR_YELLOW",
+
+                "FOUR_GREEN","FOUR_BLUE","FOUR_RED","FOUR_YELLOW","FOUR_GREEN",
+                "FOUR_BLUE","FOUR_RED","FOUR_YELLOW","FOUR_GREEN","FOUR_BLUE",
+                "FOUR_RED","FOUR_YELLOW","FOUR_GREEN","FOUR_BLUE","FOUR_RED",
+                "FOUR_YELLOW","FOUR_GREEN","FOUR_BLUE","FOUR_RED","FOUR_YELLOW",
+
+                "FOUR_GREEN","FOUR_BLUE","FOUR_RED","FOUR_YELLOW","FOUR_GREEN",
+                "FOUR_BLUE","FOUR_RED","FOUR_YELLOW","FOUR_GREEN","FOUR_BLUE",
+                "FOUR_RED","FOUR_YELLOW","FOUR_GREEN","FOUR_BLUE","FOUR_RED",
+                "FOUR_YELLOW","FOUR_GREEN","FOUR_BLUE","FOUR_RED","FOUR_YELLOW"
             ],
             "indexCount": 0
         },
         {
             "columnIndex": "3",
             "pattern": [
-                "FOUR_RED","FOUR_BLUE","FOUR_GREEN","FOUR_RED","FOUR_BLUE",
-                "FOUR_GREEN","FOUR_RED","FOUR_BLUE","FOUR_GREEN","FOUR_RED",
-                "FOUR_BLUE","FOUR_GREEN","FOUR_RED","FOUR_BLUE","FOUR_GREEN",
-                "FOUR_RED","FOUR_BLUE","FOUR_GREEN","FOUR_RED","FOUR_BLUE"
+                "FOUR_YELLOW","FOUR_RED","FOUR_BLUE","FOUR_GREEN","FOUR_YELLOW",
+                "FOUR_RED","FOUR_BLUE","FOUR_GREEN","FOUR_YELLOW","FOUR_RED",
+                "FOUR_BLUE","FOUR_GREEN","FOUR_YELLOW","FOUR_RED","FOUR_BLUE",
+                "FOUR_GREEN","FOUR_YELLOW","FOUR_RED","FOUR_BLUE","FOUR_GREEN",
+
+                "FOUR_YELLOW","FOUR_RED","FOUR_BLUE","FOUR_GREEN","FOUR_YELLOW",
+                "FOUR_RED","FOUR_BLUE","FOUR_GREEN","FOUR_YELLOW","FOUR_RED",
+                "FOUR_BLUE","FOUR_GREEN","FOUR_YELLOW","FOUR_RED","FOUR_BLUE",
+                "FOUR_GREEN","FOUR_YELLOW","FOUR_RED","FOUR_BLUE","FOUR_GREEN",
+
+                "FOUR_YELLOW","FOUR_RED","FOUR_BLUE","FOUR_GREEN","FOUR_YELLOW",
+                "FOUR_RED","FOUR_BLUE","FOUR_GREEN","FOUR_YELLOW","FOUR_RED",
+                "FOUR_BLUE","FOUR_GREEN","FOUR_YELLOW","FOUR_RED","FOUR_BLUE",
+                "FOUR_GREEN","FOUR_YELLOW","FOUR_RED","FOUR_BLUE","FOUR_GREEN",
+
+                "FOUR_YELLOW","FOUR_RED","FOUR_BLUE","FOUR_GREEN","FOUR_YELLOW",
+                "FOUR_RED","FOUR_BLUE","FOUR_GREEN","FOUR_YELLOW","FOUR_RED",
+                "FOUR_BLUE","FOUR_GREEN","FOUR_YELLOW","FOUR_RED","FOUR_BLUE",
+                "FOUR_GREEN","FOUR_YELLOW","FOUR_RED","FOUR_BLUE","FOUR_GREEN",
+
+                "FOUR_YELLOW","FOUR_RED","FOUR_BLUE","FOUR_GREEN","FOUR_YELLOW",
+                "FOUR_RED","FOUR_BLUE","FOUR_GREEN","FOUR_YELLOW","FOUR_RED",
+                "FOUR_BLUE","FOUR_GREEN","FOUR_YELLOW","FOUR_RED","FOUR_BLUE",
+                "FOUR_GREEN","FOUR_YELLOW","FOUR_RED","FOUR_BLUE","FOUR_GREEN"
             ],
             "indexCount": 0
         },
         {
             "columnIndex": "4",
             "pattern": [
-                "FOUR_GREEN","FOUR_RED","FOUR_BLUE","FOUR_GREEN","FOUR_RED",
-                "FOUR_BLUE","FOUR_GREEN","FOUR_RED","FOUR_BLUE","FOUR_GREEN",
-                "FOUR_RED","FOUR_BLUE","FOUR_GREEN","FOUR_RED","FOUR_BLUE",
-                "FOUR_GREEN","FOUR_RED","FOUR_BLUE","FOUR_GREEN","FOUR_RED"
+                "FOUR_GREEN","FOUR_YELLOW","FOUR_RED","FOUR_BLUE","FOUR_GREEN",
+                "FOUR_YELLOW","FOUR_RED","FOUR_BLUE","FOUR_GREEN","FOUR_YELLOW",
+                "FOUR_RED","FOUR_BLUE","FOUR_GREEN","FOUR_YELLOW","FOUR_RED",
+                "FOUR_BLUE","FOUR_GREEN","FOUR_YELLOW","FOUR_RED","FOUR_BLUE",
+
+                "FOUR_GREEN","FOUR_YELLOW","FOUR_RED","FOUR_BLUE","FOUR_GREEN",
+                "FOUR_YELLOW","FOUR_RED","FOUR_BLUE","FOUR_GREEN","FOUR_YELLOW",
+                "FOUR_RED","FOUR_BLUE","FOUR_GREEN","FOUR_YELLOW","FOUR_RED",
+                "FOUR_BLUE","FOUR_GREEN","FOUR_YELLOW","FOUR_RED","FOUR_BLUE",
+
+                "FOUR_GREEN","FOUR_YELLOW","FOUR_RED","FOUR_BLUE","FOUR_GREEN",
+                "FOUR_YELLOW","FOUR_RED","FOUR_BLUE","FOUR_GREEN","FOUR_YELLOW",
+                "FOUR_RED","FOUR_BLUE","FOUR_GREEN","FOUR_YELLOW","FOUR_RED",
+                "FOUR_BLUE","FOUR_GREEN","FOUR_YELLOW","FOUR_RED","FOUR_BLUE",
+
+                "FOUR_GREEN","FOUR_YELLOW","FOUR_RED","FOUR_BLUE","FOUR_GREEN",
+                "FOUR_YELLOW","FOUR_RED","FOUR_BLUE","FOUR_GREEN","FOUR_YELLOW",
+                "FOUR_RED","FOUR_BLUE","FOUR_GREEN","FOUR_YELLOW","FOUR_RED",
+                "FOUR_BLUE","FOUR_GREEN","FOUR_YELLOW","FOUR_RED","FOUR_BLUE",
+
+                "FOUR_GREEN","FOUR_YELLOW","FOUR_RED","FOUR_BLUE","FOUR_GREEN",
+                "FOUR_YELLOW","FOUR_RED","FOUR_BLUE","FOUR_GREEN","FOUR_YELLOW",
+                "FOUR_RED","FOUR_BLUE","FOUR_GREEN","FOUR_YELLOW","FOUR_RED",
+                "FOUR_BLUE","FOUR_GREEN","FOUR_YELLOW","FOUR_RED","FOUR_BLUE"
             ],
             "indexCount": 0
         }
     ],
     "passengerColumns": 
     [
-        {
-            "columnIndex": 0,
-            "pattern": [
-                "RED","GREEN","BLUE","RED","GREEN","BLUE",
-                "RED","GREEN","BLUE","RED","GREEN","BLUE",
-                "RED","GREEN","BLUE","RED","GREEN","BLUE",
-                "RED","GREEN","BLUE","RED","GREEN","BLUE"
-            ],
-            "indexCount": 0
-        },
-        {
-            "columnIndex": 1,
-            "pattern": [
-                "BLUE","RED","GREEN","BLUE","RED","GREEN",
-                "BLUE","RED","GREEN","BLUE","RED","GREEN",
-                "BLUE","RED","GREEN","BLUE","RED","GREEN",
-                "BLUE","RED","GREEN","BLUE","RED","GREEN"
-            ],
-            "indexCount": 0
-        },
-        {
-            "columnIndex": 2,
-            "pattern": [
-                "GREEN","BLUE","RED","GREEN","BLUE","RED",
-                "GREEN","BLUE","RED","GREEN","BLUE","RED",
-                "GREEN","BLUE","RED","GREEN","BLUE","RED",
-                "GREEN","BLUE","RED","GREEN","BLUE","RED"
-            ],
-            "indexCount": 0
-        }
+    {
+        "columnIndex": 0,
+        "pattern": [
+            "RED","YELLOW","RED","BLUE","RED","GREEN","RED","RED",
+            "YELLOW","BLUE","RED","GREEN","RED","BLUE","RED","YELLOW",
+            "BLUE","GREEN","RED","RED",
+
+            "RED","YELLOW","RED","BLUE","RED","GREEN","RED","RED",
+            "YELLOW","BLUE","RED","GREEN","RED","BLUE","RED","YELLOW",
+            "BLUE","GREEN","RED","RED"
+        ],
+        "indexCount": 0
+    },
+    {
+        "columnIndex": 1,
+        "pattern": [
+            "BLUE","RED","BLUE","YELLOW","BLUE","GREEN","BLUE","RED",
+            "BLUE","RED","YELLOW","BLUE","GREEN","BLUE","RED","BLUE",
+            "YELLOW","GREEN","RED","BLUE",
+
+            "BLUE","RED","BLUE","YELLOW","BLUE","GREEN","BLUE","RED",
+            "BLUE","RED","YELLOW","BLUE","GREEN","BLUE","RED","BLUE",
+            "YELLOW","GREEN","RED","BLUE"
+        ],
+        "indexCount": 0
+    },
+    {
+        "columnIndex": 2,
+        "pattern": [
+            "GREEN","RED","GREEN","YELLOW","GREEN","BLUE","GREEN","RED",
+            "GREEN","BLUE","YELLOW","GREEN","RED","GREEN","BLUE","GREEN",
+            "YELLOW","RED","BLUE","GREEN",
+
+            "GREEN","RED","GREEN","YELLOW","GREEN","BLUE","GREEN","RED",
+            "GREEN","BLUE","YELLOW","GREEN","RED","GREEN","BLUE","GREEN",
+            "YELLOW","RED","BLUE","GREEN"
+        ],
+        "indexCount": 0
+    },
+    {
+        "columnIndex": 3,
+        "pattern": [
+            "YELLOW","RED","YELLOW","GREEN","YELLOW","BLUE","YELLOW","RED",
+            "YELLOW","GREEN","BLUE","YELLOW","RED","YELLOW","GREEN","YELLOW",
+            "BLUE","RED","GREEN","YELLOW",
+
+            "YELLOW","RED","YELLOW","GREEN","YELLOW","BLUE","YELLOW","RED",
+            "YELLOW","GREEN","BLUE","YELLOW","RED","YELLOW","GREEN","YELLOW",
+            "BLUE","RED","GREEN","YELLOW"
+        ],
+        "indexCount": 0
+    }
     ]
 
 

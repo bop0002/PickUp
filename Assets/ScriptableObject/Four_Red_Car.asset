@@ -15,4 +15,5 @@ MonoBehaviour:
   objectName: RedCar
   seat: 4
   color: 0
+  carType: 0
   prefab: {fileID: 6132764794488865710, guid: b2f04474437a8054583c1f0689f5e715, type: 3}
