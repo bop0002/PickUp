@@ -35,7 +35,7 @@ public class GridSystem : MonoBehaviour
     public event Action<int> OnCenterGroupChange;
     GameObject carGridParent;
     GameObject passengerGridParent;
-
+    public bool isProcessing;
     string folderSpawnPath;
     string fileSpawnPath;
     string json;
@@ -91,6 +91,8 @@ public class GridSystem : MonoBehaviour
         InitCarFile();
         InitPassengerFile();
 
+        isProcessing = false;
+
         passengerColumns[0].transform.position = new Vector3(-2.7f, 0, 0);
         passengerColumns[1].transform.position = new Vector3(0.53f, 0, 0);
         passengerColumns[2].transform.position = new Vector3(3.85f, 0, 0);
@@ -98,6 +100,7 @@ public class GridSystem : MonoBehaviour
     //Hi HI
     public IEnumerator CheckDepartAndMove()
     {
+        isProcessing = true;
         CarObject[,] carArray = gridCar.GetGridArray();
         PassengerObject[,] passengerArray = gridPassenger.GetGridArray();
         bool changed = true;
@@ -135,6 +138,7 @@ public class GridSystem : MonoBehaviour
                             if(carArray[currentCarColumnIndex,carZ].GetSeat()<=0)
                             {
                                 countCarDepart++;
+                                yield return StartCoroutine(CarDepart(carArray[currentCarColumnIndex, carZ]));
                                 break;
                             }
                         }
@@ -146,16 +150,27 @@ public class GridSystem : MonoBehaviour
                                 PassengerSO nextPassengerSO = GetNextPassengerSO(currentPassengerColumnIndex);
                                 if(nextPassengerSO!= null)
                                 {
-                                    Passenger passenger = Passenger.Create(gridPassenger.GetWorldPosition(currentPassengerColumnIndex, k), nextPassengerSO);
-                                    passengerArray[currentPassengerColumnIndex,k].SetPassenger(passenger);
+                                    Passenger passenger = Passenger.Create(gridPassenger.GetWorldPosition(currentPassengerColumnIndex, gridPassengerHeight - 1 - k), nextPassengerSO);
+                                    passenger.name = $"({currentPassengerColumnIndex},{k})";
+                                    passengerArray[currentPassengerColumnIndex, k].SetPassenger(passenger);
+                                    passenger.transform.SetParent(passengerColumns[currentPassengerColumnIndex].transform,false);
                                 }
                             }
                         }
-                        if (carArray[currentCarColumnIndex, carZ].GetSeat() <= 0)
+                        if (countCarDepart > 0)
                         {
-                            CarObject carObject = gridCar.GetGridObject(currentCarColumnIndex, carZ);
-                            yield return StartCoroutine(CarDepart(carObject, currentCarColumnIndex, carZ));
-                            gridCar.ShiftColumnUp(currentCarColumnIndex);
+                            gridCar.ShiftColumnUp(currentCarColumnIndex, countCarDepart);
+                            for (int k = 0; k < countCarDepart; k++)
+                            {
+                                CarSO nextCarSO = GetNextCarSO(currentCarColumnIndex);
+                                if (nextCarSO != null)
+                                {
+                                    Car car = Car.Create(gridCar.GetWorldPosition(currentCarColumnIndex,k), nextCarSO);
+                                    car.name = $"({currentCarColumnIndex},{k})";
+                                    carArray[currentCarColumnIndex, k].SetCar(car);
+                                    car.transform.SetParent(rowParentGameObject[k].GetCenterGroup().transform, false);
+                                }
+                            }
                         }
                         changed = true;
                         breakFor = true;
@@ -168,26 +183,24 @@ public class GridSystem : MonoBehaviour
 
         gridCar.DebugPrintGridArray();
         gridPassenger.DebugPrintGridArray();
+        isProcessing = false;
     }
+
 
     private IEnumerator PassengerDepart(PassengerObject passengerObject)
     {
         passengerObject.GetPassenger().TestAnimationOnDepart();
         yield return new WaitForSecondsRealtime(2);
         passengerObject.ClearObject();
+        yield return null;
     }
 
-    private IEnumerator CarDepart(CarObject carObject, int column, int z)
+    private IEnumerator CarDepart(CarObject carObject)
     {
         carObject.GetCar().TestAnimationOnDepart();
         yield return new WaitForSecondsRealtime(2);
-        CarSO nextCarSo = GetNextCarSO(column);
-        if(nextCarSo != null)
-        {
-            carObject.ClearObject();
-            Car car = Car.Create(gridCar.GetWorldPosition(column, z), nextCarSo);
-            carObject.SetCar(car);
-        }
+        carObject.ClearObject();
+        yield return null;
     }
     //Passenger
     private void InitPassengerFile()
@@ -242,17 +255,16 @@ public class GridSystem : MonoBehaviour
         }
         return null;
     }
-    private void CreatePassenger(int column)
+    private void UpdatePassenger(int column)
     {
         for (int z = 0; z < gridPassengerHeight; z++)
         {
             int mirroredZ = gridPassengerHeight - 1 - z;
-            passengerSO = GetNextPassengerSO(column);
-            if (passengerSO != null)
+            PassengerObject passengerObject = gridPassenger.GetGridObject(column, z);
+            if(passengerObject.GetPassenger()!= null & passengerObject.GetPassenger().GetSO()!= null)
             {
-                Passenger passenger = Passenger.Create(gridPassenger.GetWorldPosition(column, mirroredZ), passengerSO);
+                Passenger passenger = Passenger.Create(gridPassenger.GetWorldPosition(column, mirroredZ), passengerObject.GetPassenger().GetSO());
                 passenger.name = $"({column},{z})";
-                PassengerObject passengerObject = gridPassenger.GetGridObject(column, z);
                 passenger.transform.SetParent(passengerColumns[column].transform, false);
                 passengerObject.SetPassenger(passenger);
             }
@@ -270,7 +282,7 @@ public class GridSystem : MonoBehaviour
     private void UpdateVisualPassengerColumnAfterShift(int column)
     {
         ClearColumnPassengerVisual(column);
-        CreatePassenger(column);
+        UpdatePassenger(column);
     }
     private void ClearColumnPassengerVisual(int column)
     {
@@ -346,7 +358,6 @@ public class GridSystem : MonoBehaviour
             return;
         }
         UpdateVisualRowAfterShift(e.row);
-        gridCar.DebugPrintGridArray();
     }
     private void GridCar_OnGridColumnVisualChanged(object sender, Grid<CarObject>.OnGridColumnVisualChangedEventArgs e) //co the refactor
     {
@@ -360,25 +371,29 @@ public class GridSystem : MonoBehaviour
             UpdateVisualRowAfterShift(i);
         }
         //UpdateVisualColumnAfterShift(e.column);
-        gridCar.DebugPrintGridArray();
     }
+    // code ngu nhung thanh tinh nang ?
     private void UpdateVisualRowAfterShift(int row)
     {
         ClearRowObjectVisual(row);
+        UpdateCarRow(row);
+    }
+    private void UpdateCarRow(int row)
+    {
         for (int x = 0; x < gridCarWidth; x++)
         {
             CarObject carObject = gridCar.GetGridObject(x, row);
-            Car spawnedCar = Car.Create(gridCar.GetWorldPosition(x, row), carObject.GetCar().GetSO());
-            spawnedCar.name = $"({x},{row})";
-            int tempSlotSeat = carObject.GetSeat();
-            carObject.ClearObject();
-            carObject.SetCar(spawnedCar,tempSlotSeat);
-            spawnedCar.transform.SetParent(rowParentGameObject[row].GetCenterGroup(),false);
+            if(carObject.GetCar()!=null & carObject.GetCar().GetSO()!=null&carObject.GetSeat()>0)
+            {
+                Car spawnedCar = Car.Create(gridCar.GetWorldPosition(x, row), carObject.GetCar().GetSO());
+                spawnedCar.name = $"({x},{row})";
+                int tempSlotSeat = carObject.GetSeat();
+                carObject.SetCar(spawnedCar, tempSlotSeat);
+                spawnedCar.transform.SetParent(rowParentGameObject[row].GetCenterGroup(), false);
+            }
         }
         OnCenterGroupChange?.Invoke(row);
-
     }
-
     private void ClearRowObjectVisual(int row)
     {
         for (int x = 0; x < gridCarWidth; x++)

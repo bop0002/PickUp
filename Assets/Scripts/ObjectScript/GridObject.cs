@@ -1,7 +1,8 @@
 using UnityEngine;
+using UnityEngine.LowLevelPhysics;
 using static GridSystem;
 using static UnityEngine.EventSystems.EventTrigger;
-
+using UnityEditor;
 public abstract class GridObject<TGridObject,TDataSO,TChild> where TDataSO : ISO where TChild : GridObject<TGridObject, TDataSO, TChild>
 {
     protected Grid<TChild> grid;
@@ -24,7 +25,14 @@ public abstract class GridObject<TGridObject,TDataSO,TChild> where TDataSO : ISO
     {
         entity.SelfDestroy();
     }
-    
+    public void ClearObjectImmediate()
+    {
+        if (entity != null)
+        {
+            entity.SelfDestroy();
+            entity = null;
+        }
+    }
     public bool CanBuild()
     {
         return this.entity == null;
@@ -37,7 +45,8 @@ public abstract class GridObject<TGridObject,TDataSO,TChild> where TDataSO : ISO
     override
     public string ToString()
     {
-        return entity.ToString()+ ",";
+        return entity != null ? entity.ToString() + "," : "null,";
     }
+
 
 }

@@ -157,12 +157,7 @@
         "columnIndex": 0,
         "pattern": [
             "RED","YELLOW","RED","BLUE","RED","GREEN","RED","RED",
-            "YELLOW","BLUE","RED","GREEN","RED","BLUE","RED","YELLOW",
-            "BLUE","GREEN","RED","RED",
-
-            "RED","YELLOW","RED","BLUE","RED","GREEN","RED","RED",
-            "YELLOW","BLUE","RED","GREEN","RED","BLUE","RED","YELLOW",
-            "BLUE","GREEN","RED","RED"
+            "YELLOW","BLUE","RED","GREEN","RED","BLUE","RED","YELLOW"
         ],
         "indexCount": 0
     },
@@ -170,12 +165,7 @@
         "columnIndex": 1,
         "pattern": [
             "BLUE","RED","BLUE","BLUE","BLUE","GREEN","BLUE","RED",
-            "BLUE","RED","YELLOW","BLUE","GREEN","BLUE","RED","BLUE",
-            "YELLOW","GREEN","RED","BLUE",
-
-            "BLUE","RED","BLUE","YELLOW","BLUE","GREEN","BLUE","RED",
-            "BLUE","RED","YELLOW","BLUE","GREEN","BLUE","RED","BLUE",
-            "YELLOW","GREEN","RED","BLUE"
+            "BLUE","RED","YELLOW","BLUE","GREEN","BLUE","RED","BLUE"
         ],
         "indexCount": 0
     },
@@ -183,12 +173,7 @@
         "columnIndex": 2,
         "pattern": [
             "GREEN","RED","GREEN","RED","GREEN","BLUE","GREEN","RED",
-            "GREEN","BLUE","YELLOW","GREEN","RED","GREEN","BLUE","GREEN",
-            "YELLOW","RED","BLUE","GREEN",
-
-            "GREEN","RED","GREEN","YELLOW","GREEN","BLUE","GREEN","RED",
-            "GREEN","BLUE","YELLOW","GREEN","RED","GREEN","BLUE","GREEN",
-            "YELLOW","RED","BLUE","GREEN"
+            "GREEN","BLUE","YELLOW","GREEN","RED","GREEN","BLUE","GREEN"
         ],
         "indexCount": 0
     }

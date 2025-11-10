@@ -110,7 +110,7 @@ public class Grid<TGridObject>
     //shift cac thu co the refactor thanh linkedlist va queue stack cac thu
     public void ShiftColumnUp(int column, int shiftCount)
     {
-        if(shiftCount<=0)
+        if (shiftCount<=0)
         {
             return;
         }

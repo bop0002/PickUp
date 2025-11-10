@@ -15,6 +15,7 @@ public class GridDragController : MonoBehaviour
     private Vector3 currentMousePos;
     private Vector3 endMousePos;
     private bool isDragging;
+    private bool isMoving;
     private float totalWidth;
     private int maxShift;
     private int width;
@@ -26,6 +27,7 @@ public class GridDragController : MonoBehaviour
         gridSystem = GetComponent<GridSystem>();
         grid = gridSystem.GetGrid();
         isDragging = false;
+        isMoving = false;
         cellSize = grid.GetCellSize();
         totalWidth = grid.GetTotalWidth();
         width = grid.GetGridWidth();
@@ -39,7 +41,12 @@ public class GridDragController : MonoBehaviour
 
     private void Update()
     {
-        //DRAG 
+        //DRAG
+        if(gridSystem.isProcessing)
+        {
+            isDragging = false;
+            return;
+        }
         if (Input.GetMouseButtonDown(0))
         {
             startMousePos = Mouse3D.GetMouseWorldPosition();
