@@ -44,10 +44,10 @@ public class RowVisualGroup
         rightGroup.name = $"Row{rowIndex}_Right";
     }
 
-    public void RememberOriginalPositions()
-    {
-        originalCenterPos = centerGroup.localPosition;
-    }
+    //public void RememberOriginalPos()
+    //{
+    //    originalCenterPos = centerGroup.localPosition;
+    //}
     public void ResetPosition()
     {
         centerGroup.localPosition = originalCenterPos;
@@ -65,9 +65,11 @@ public class RowVisualGroup
     private void GridSystem_OnCenterGroupChange(int rowIndex)
     {
         if (this.rowIndex == rowIndex)
+        {
             gridSystem.StartCoroutine(DelayedClone());
+        }
     }
-
+    //Dong bo side visual
     private IEnumerator DelayedClone()
     {
         yield return null;

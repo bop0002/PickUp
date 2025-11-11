@@ -2,15 +2,15 @@ using System;
 using System.Collections;
 using UnityEngine;
 
-public abstract class Entity<TDataSO> : MonoBehaviour where TDataSO : ISO
+public abstract class PlacedObject<TDataSO> : MonoBehaviour where TDataSO : ISO
 {
     protected TDataSO dataSO;
-    public static T Create<T>(Vector3 worldPosition, TDataSO dataSO) where T : Entity<TDataSO>
+    public static T Create<T>(Vector3 worldPosition, TDataSO dataSO) where T : PlacedObject<TDataSO>
     {
-        Transform entityTransform = Instantiate(dataSO.GetPrefab().transform, worldPosition, Quaternion.identity);
-        T entity = entityTransform.GetComponent<T>();
-        entity.dataSO = dataSO;
-        return entity;
+        Transform placedObjectTransform = Instantiate(dataSO.GetPrefab().transform, worldPosition, Quaternion.identity);
+        T placedObject = placedObjectTransform.GetComponent<T>();
+        placedObject.dataSO = dataSO;
+        return placedObject;
     }
     public override string ToString()
     {

@@ -1,12 +1,11 @@
 using UnityEngine;
 
-public class Car : Entity<CarSO>
+public class Car : PlacedObject<CarSO>
 {
 
     public static Car Create(Vector3 worldPosition, CarSO carSO)
     {
-        Car car = Create<Car>(worldPosition, carSO);
-        return car;
+        return Create<Car>(worldPosition, carSO);
     }
 
     public override string ToString()

@@ -6,38 +6,32 @@ using UnityEditor;
 public abstract class GridObject<TGridObject,TDataSO,TChild> where TDataSO : ISO where TChild : GridObject<TGridObject, TDataSO, TChild>
 {
     protected Grid<TChild> grid;
-    protected Entity<TDataSO> entity;
+    protected PlacedObject<TDataSO> placedObject;
 
-    public void SetObject(Entity<TDataSO> entity)
+    public void SetObject(PlacedObject<TDataSO> placedObject)
     {
-        this.entity = entity;
-        //grid.TriggerGridObjectChanged(x, z);
+        this.placedObject = placedObject;
     }
-    public Entity<TDataSO> GetEntity()
+    public PlacedObject<TDataSO> GetPlacedObject()
     {
-        return this.entity;
+        return this.placedObject;
     }
     public EColor GetColor()
     {
-        return entity.GetColor();
+        return placedObject.GetColor();
     }
     public void ClearObject()
     {
-        entity.SelfDestroy();
+        placedObject.SelfDestroy();
     }
     public void ClearObjectImmediate()
     {
-        if (entity != null)
+        if (placedObject != null)
         {
-            entity.SelfDestroy();
-            entity = null;
+            placedObject.SelfDestroy();
+            placedObject = null;
         }
     }
-    public bool CanBuild()
-    {
-        return this.entity == null;
-    }
-
     public GridObject(Grid<TChild> grid)
     {
         this.grid = grid;
@@ -45,7 +39,7 @@ public abstract class GridObject<TGridObject,TDataSO,TChild> where TDataSO : ISO
     override
     public string ToString()
     {
-        return entity != null ? entity.ToString() + "," : "null,";
+        return placedObject != null ? placedObject.ToString() + "," : "null,";
     }
 
 

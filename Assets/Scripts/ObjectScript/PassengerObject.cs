@@ -8,7 +8,7 @@ public class PassengerObject : GridObject<Passenger, PassengerSO, PassengerObjec
     }
     public Passenger GetPassenger()
     {
-        return (Passenger) GetEntity();
+        return (Passenger) GetPlacedObject();
     }
     public PassengerObject(Grid<PassengerObject> grid) : base(grid)
     {

@@ -5,7 +5,7 @@ using static GridSystem;
 
 public class GridDragController : MonoBehaviour
 {
-    //legacy input co the refactor xau
+    //legacy input co the refactor sau
     private GridSystem gridSystem;
     private Grid<CarObject> grid;
     private int startX, startZ;
@@ -53,7 +53,7 @@ public class GridDragController : MonoBehaviour
             grid.GetXZ(startMousePos, out startX, out startZ);
             if(startX >=0 && startX<width && startZ<height && startZ>=0)
             {
-                //gridSystem.GetRowVisualGroup(startZ).RememberOriginalPositions();
+                //gridSystem.GetRowVisualGroup(startZ).RememberOriginalPos();
                 isDragging = true;
             }
         }
@@ -64,7 +64,6 @@ public class GridDragController : MonoBehaviour
             float delta = currentMousePos.x - startMousePos.x;
             delta = Mathf.Clamp(delta, -totalWidth, totalWidth);
             gridSystem.GetRowVisualGroup(moveRow).SetRowOffset(delta);
-            //gridSystem.GetRowVisualGroup(startZ).SetRowOffset(delta);
         }
 
         if (Input.GetMouseButtonUp(0) && isDragging)
@@ -98,13 +97,6 @@ public class GridDragController : MonoBehaviour
             gridSystem.GetRowVisualGroup(moveRow).ResetPosition();
             StartCoroutine(gridSystem.CheckDepartAndMove());
         }
-
-        //test shift and spawn column
-        //if (Input.GetMouseButtonDown(1))
-        //{
-        //    StartCoroutine(gridSystem.CheckDepartAndMove());
-
-        //}
 
     }
 }

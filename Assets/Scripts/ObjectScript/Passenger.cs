@@ -1,5 +1,5 @@
 using UnityEngine;
-public class Passenger : Entity<PassengerSO>
+public class Passenger : PlacedObject<PassengerSO>
 {
     public static Passenger Create(Vector3 worldPosition, PassengerSO passengerSO)
     {

@@ -170,17 +170,17 @@ public class Grid<TGridObject>
     }
 
 
-    public void TriggerGridObjectChanged(int x,int z,TGridObject gridObject)
-    {
-        SetGridObject(x, z, gridObject);
-    }
+    //public void TriggerGridObjectChanged(int x,int z,TGridObject gridObject)
+    //{
+    //    SetGridObject(x, z, gridObject);
+    //}
 
-    public void SetGridObject(Vector3 worldposition, TGridObject gridObject) // test
-    {
-        int x, z;
-        GetXZ(worldposition, out x, out z);
-        SetGridObject(x, z, gridObject);
-    }
+    //public void SetGridObject(Vector3 worldposition, TGridObject gridObject) // test
+    //{
+    //    int x, z;
+    //    GetXZ(worldposition, out x, out z);
+    //    SetGridObject(x, z, gridObject);
+    //}
     public void SetGridObject(int x, int z, TGridObject gridObject)
     {
         if (x >= 0 && x < width && z >= 0 && z < height) {
