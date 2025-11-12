@@ -7,6 +7,7 @@ public class GridDragController : MonoBehaviour
 {
     //legacy input co the refactor sau
     [SerializeField]private GridSystem gridSystem;
+    [SerializeField] private GameObject testObject;
     private Grid<CarObject> grid;
     private int startX, startZ;
     private float cellSize;
@@ -20,7 +21,9 @@ public class GridDragController : MonoBehaviour
     private int maxShift;
     private int width;
     private int height;
-    private readonly int rowToMove = 2; 
+    private readonly int firstRowMove = 2;
+    private readonly int secondRowMove = 1;
+    private int rowToMove;
     private void Start()
     {
         gridSystem.OnLoadDataSuccess += GridSystem_OnLoadDataSuccess;
@@ -33,7 +36,7 @@ public class GridDragController : MonoBehaviour
 
     private void Init()
     {
-        grid = gridSystem.GetGrid();
+        grid = gridSystem.GetCarGrid();
         isDragging = false;
         isMoving = false;
         cellSize = grid.GetCellSize();
@@ -48,7 +51,7 @@ public class GridDragController : MonoBehaviour
     private void Update()
     {
         //DRAG
-        if(gridSystem.isProcessing)
+        if (gridSystem.isProcessing)
         {
             isDragging = false;
             return;
@@ -57,9 +60,11 @@ public class GridDragController : MonoBehaviour
         {
             startMousePos = Mouse3D.GetMouseWorldPosition();
             grid.GetXZ(startMousePos, out startX, out startZ);
-            if(startX >=0 && startX<width && startZ<height && startZ>=0)
+            if(startX >=0 && startX<width && startZ<height && startZ>=1)
             {
                 //gridSystem.GetRowVisualGroup(startZ).RememberOriginalPos();
+                rowToMove = Mathf.Clamp(startZ, secondRowMove, firstRowMove);
+                rowToMove = startZ;
                 isDragging = true;
             }
         }
@@ -77,7 +82,6 @@ public class GridDragController : MonoBehaviour
             isDragging = false;
             endMousePos = Mouse3D.GetMouseWorldPosition();
             Vector3 dragVector = endMousePos - startMousePos;
-
             if (dragVector.magnitude > dragThreshold)
             {
                 int shiftCount = 0;
@@ -101,7 +105,10 @@ public class GridDragController : MonoBehaviour
                 }
             }
             gridSystem.GetRowVisualGroup(rowToMove).ResetPosition();
-            StartCoroutine(gridSystem.CheckDepartAndMove());
+            if(rowToMove == firstRowMove)
+            {
+                StartCoroutine(gridSystem.CheckDepartAndMove());
+            }
         }
 
     }

@@ -50,7 +50,7 @@ public class GridSystem : MonoBehaviour
     {
         yield return StartCoroutine(LoadData());
         Init();
-        //yield return null;
+        yield return null;
         OnLoadDataSuccess?.Invoke();
     }
     IEnumerator LoadData()
@@ -131,81 +131,66 @@ public class GridSystem : MonoBehaviour
         isProcessing = true;
         CarObject[,] carArray = gridCar.GetGridArray();
         PassengerObject[,] passengerArray = gridPassenger.GetGridArray();
-        bool changed = true;
-        bool breakFor;
         int passengerHeight = gridPassengerHeight - 1;
         int carHeight = gridCarHeight - 1;
         int carZ;
         int passengerZ;
 
-        while (changed)
+        for (int i = 0; i < departIndexPassenger.Length; i++)
         {
             carArray = gridCar.GetGridArray();
             passengerArray = gridPassenger.GetGridArray();
-            changed = false;
-            breakFor = false;
-            for (int i = 0; i < departIndexCar.Length; i++)
+            int currentCarColumnIndex = departIndexCar[i];
+            int currentPassengerColumnIndex = departIndexPassenger[i];
+            int countCarDepart = 0;
+            carZ = carHeight - countCarDepart;
+            int countPassengerDepart = 0;
+            passengerZ = passengerHeight - countPassengerDepart;
+            //if (passengerArray[i, passengerZ].GetPassenger() == null) continue;
+            while (carArray[currentCarColumnIndex, carZ].GetColor() == passengerArray[currentPassengerColumnIndex, passengerZ].GetColor())
             {
-                int countCarDepart = 0;
-                for (int j = 0; j < departIndexPassenger.Length; j++)
+                yield return StartCoroutine(PassengerDepart(passengerArray[currentPassengerColumnIndex, passengerZ]));
+                countPassengerDepart++;
+                passengerZ = passengerHeight - countPassengerDepart;
+                carArray[currentCarColumnIndex, carZ].SeatDec();
+                if (carArray[currentCarColumnIndex, carZ].GetSeat() <= 0)
                 {
-                    carZ = carHeight - countCarDepart;
-                    int currentCarColumnIndex = departIndexCar[i];
-                    int countPassengerDepart = 0;
-                    int currentPassengerColumnIndex = departIndexPassenger[j];
-                    passengerZ = passengerHeight - countPassengerDepart;
-                    if (passengerArray[currentPassengerColumnIndex, passengerZ].GetPassenger() == null) continue;
-                    if (carArray[currentCarColumnIndex, carZ].GetColor() == passengerArray[currentPassengerColumnIndex, passengerZ].GetColor())
-                    {
-                        while (carArray[currentCarColumnIndex, carZ].GetColor() == passengerArray[currentPassengerColumnIndex, passengerZ].GetColor())
-                        {
-                            yield return StartCoroutine(PassengerDepart(passengerArray[currentPassengerColumnIndex, passengerZ]));
-                            countPassengerDepart++;
-                            passengerZ = passengerHeight - countPassengerDepart;
-                            carArray[currentCarColumnIndex, carZ].SeatDec();
-                            if (carArray[currentCarColumnIndex, carZ].GetSeat() <= 0)
-                            {
-                                countCarDepart++;
-                                yield return StartCoroutine(CarDepart(carArray[currentCarColumnIndex, carZ]));
-                                break;
-                            }
-                        }
-                        if (countPassengerDepart > 0)
-                        {
-                            gridPassenger.ShiftColumnUp(currentPassengerColumnIndex, countPassengerDepart);
-                            for (int k = 0; k < countPassengerDepart; k++)
-                            {
-                                PassengerSO nextPassengerSO = GetNextPassengerSO(currentPassengerColumnIndex);
-                                if (nextPassengerSO != null)
-                                {
-                                    Passenger passenger = Passenger.Create(gridPassenger.GetWorldPosition(currentPassengerColumnIndex, gridPassengerHeight - 1 - k), nextPassengerSO);
-                                    passenger.name = $"({currentPassengerColumnIndex},{k})";
-                                    passengerArray[currentPassengerColumnIndex, k].SetPassenger(passenger);
-                                    passenger.transform.SetParent(passengerColumns[currentPassengerColumnIndex].transform, false);
-                                }
-                            }
-                        }
-                        if (countCarDepart > 0)
-                        {
-                            gridCar.ShiftColumnUp(currentCarColumnIndex, countCarDepart);
-                            for (int k = 0; k < countCarDepart; k++)
-                            {
-                                CarSO nextCarSO = GetNextCarSO(currentCarColumnIndex);
-                                if (nextCarSO != null)
-                                {
-                                    Car car = Car.Create(gridCar.GetWorldPosition(currentCarColumnIndex, k), nextCarSO);
-                                    car.name = $"({currentCarColumnIndex},{k})";
-                                    carArray[currentCarColumnIndex, k].SetCar(car);
-                                    car.transform.SetParent(rowParentGameObject[k].GetCenterGroup().transform, false);
-                                }
-                            }
-                        }
-                        changed = true;
-                        breakFor = true;
-                    }
-                    if (breakFor) break;
+                    countCarDepart++;
+                    yield return StartCoroutine(CarDepart(carArray[currentCarColumnIndex, carZ]));
+                    break;
                 }
-                if (breakFor) break;
+            }
+            if (countPassengerDepart > 0)
+            {
+                gridPassenger.ShiftColumnUp(currentPassengerColumnIndex, countPassengerDepart);
+                for (int k = 0; k < countPassengerDepart; k++)
+                {
+                    PassengerSO nextPassengerSO = GetNextPassengerSO(currentPassengerColumnIndex);
+                    if (nextPassengerSO != null)
+                    {
+                        Passenger passenger = Passenger.Create(gridPassenger.GetWorldPosition(currentPassengerColumnIndex, gridPassengerHeight - 1 - k), nextPassengerSO);
+                        passenger.name = $"({currentPassengerColumnIndex},{k})";
+                        passengerArray[currentPassengerColumnIndex, k].SetPassenger(passenger);
+                        passenger.transform.SetParent(passengerColumns[currentPassengerColumnIndex].transform, false);
+                    }
+                }
+            }
+            if (countCarDepart > 0)
+            {
+                gridCar.ShiftColumnUp(currentCarColumnIndex, countCarDepart);
+                for (int k = 0; k < countCarDepart; k++)
+                {
+                    CarSO nextCarSO = GetNextCarSO(currentCarColumnIndex);
+                    if (nextCarSO != null)
+                    {
+                        Car car = Car.Create(gridCar.GetWorldPosition(currentCarColumnIndex, k), nextCarSO);
+                        car.name = $"({currentCarColumnIndex},{k})";
+                        carArray[currentCarColumnIndex, k].SetCar(car);
+                        car.transform.SetParent(rowParentGameObject[k].GetCenterGroup().transform, false);
+                    }
+                }
+                i--;
+                continue;
             }
         }
 
@@ -213,6 +198,93 @@ public class GridSystem : MonoBehaviour
         gridPassenger.DebugPrintGridArray();
         isProcessing = false;
     }
+    //public IEnumerator CheckDepartAndMove()
+    //{
+    //    isProcessing = true;
+    //    CarObject[,] carArray = gridCar.GetGridArray();
+    //    PassengerObject[,] passengerArray = gridPassenger.GetGridArray();
+    //    bool changed = true;
+    //    bool breakFor;
+    //    int passengerHeight = gridPassengerHeight - 1;
+    //    int carHeight = gridCarHeight - 1;
+    //    int carZ;
+    //    int passengerZ;
+
+    //    while (changed)
+    //    {
+    //        carArray = gridCar.GetGridArray();
+    //        passengerArray = gridPassenger.GetGridArray();
+    //        changed = false;
+    //        breakFor = false;
+    //        for (int i = 0; i < departIndexCar.Length; i++)
+    //        {
+    //            int countCarDepart = 0;
+    //            for (int j = 0; j < departIndexPassenger.Length; j++)
+    //            {
+    //                carZ = carHeight - countCarDepart;
+    //                int currentCarColumnIndex = departIndexCar[i];
+    //                int countPassengerDepart = 0;
+    //                int currentPassengerColumnIndex = departIndexPassenger[j];
+    //                passengerZ = passengerHeight - countPassengerDepart;
+    //                if (passengerArray[currentPassengerColumnIndex, passengerZ].GetPassenger() == null) continue;
+    //                if (carArray[currentCarColumnIndex, carZ].GetColor() == passengerArray[currentPassengerColumnIndex, passengerZ].GetColor())
+    //                {
+    //                    while (carArray[currentCarColumnIndex, carZ].GetColor() == passengerArray[currentPassengerColumnIndex, passengerZ].GetColor())
+    //                    {
+    //                        yield return StartCoroutine(PassengerDepart(passengerArray[currentPassengerColumnIndex, passengerZ]));
+    //                        countPassengerDepart++;
+    //                        passengerZ = passengerHeight - countPassengerDepart;
+    //                        carArray[currentCarColumnIndex, carZ].SeatDec();
+    //                        if (carArray[currentCarColumnIndex, carZ].GetSeat() <= 0)
+    //                        {
+    //                            countCarDepart++;
+    //                            yield return StartCoroutine(CarDepart(carArray[currentCarColumnIndex, carZ]));
+    //                            break;
+    //                        }
+    //                    }
+    //                    if (countPassengerDepart > 0)
+    //                    {
+    //                        gridPassenger.ShiftColumnUp(currentPassengerColumnIndex, countPassengerDepart);
+    //                        for (int k = 0; k < countPassengerDepart; k++)
+    //                        {
+    //                            PassengerSO nextPassengerSO = GetNextPassengerSO(currentPassengerColumnIndex);
+    //                            if (nextPassengerSO != null)
+    //                            {
+    //                                Passenger passenger = Passenger.Create(gridPassenger.GetWorldPosition(currentPassengerColumnIndex, gridPassengerHeight - 1 - k), nextPassengerSO);
+    //                                passenger.name = $"({currentPassengerColumnIndex},{k})";
+    //                                passengerArray[currentPassengerColumnIndex, k].SetPassenger(passenger);
+    //                                passenger.transform.SetParent(passengerColumns[currentPassengerColumnIndex].transform, false);
+    //                            }
+    //                        }
+    //                    }
+    //                    if (countCarDepart > 0)
+    //                    {
+    //                        gridCar.ShiftColumnUp(currentCarColumnIndex, countCarDepart);
+    //                        for (int k = 0; k < countCarDepart; k++)
+    //                        {
+    //                            CarSO nextCarSO = GetNextCarSO(currentCarColumnIndex);
+    //                            if (nextCarSO != null)
+    //                            {
+    //                                Car car = Car.Create(gridCar.GetWorldPosition(currentCarColumnIndex, k), nextCarSO);
+    //                                car.name = $"({currentCarColumnIndex},{k})";
+    //                                carArray[currentCarColumnIndex, k].SetCar(car);
+    //                                car.transform.SetParent(rowParentGameObject[k].GetCenterGroup().transform, false);
+    //                            }
+    //                        }
+    //                    }
+    //                    changed = true;
+    //                    breakFor = true;
+    //                }
+    //                if (breakFor) break;
+    //            }
+    //            if (breakFor) break;
+    //        }
+    //    }
+
+    //    gridCar.DebugPrintGridArray();
+    //    gridPassenger.DebugPrintGridArray();
+    //    isProcessing = false;
+    //}
 
 
     private IEnumerator PassengerDepart(PassengerObject passengerObject)
@@ -311,6 +383,7 @@ public class GridSystem : MonoBehaviour
     {
         ClearColumnPassengerVisual(column);
         UpdatePassenger(column);
+
     }
     private void ClearColumnPassengerVisual(int column)
     {
@@ -471,7 +544,7 @@ public class GridSystem : MonoBehaviour
         return rowParentGameObject[row];
     }
 
-    public Grid<CarObject> GetGrid()
+    public Grid<CarObject> GetCarGrid()
     {
         return this.gridCar;
     }

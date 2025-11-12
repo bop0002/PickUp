@@ -1,6 +1,6 @@
 using UnityEngine;
 using static GridSystem;
-
+using TMPro;
 public class CarObject : GridObject<Car,CarSO,CarObject>
 {
     private int seatSlot;
