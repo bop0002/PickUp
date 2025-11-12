@@ -6,7 +6,7 @@ using static GridSystem;
 public class GridDragController : MonoBehaviour
 {
     //legacy input co the refactor sau
-    private GridSystem gridSystem;
+    [SerializeField]private GridSystem gridSystem;
     private Grid<CarObject> grid;
     private int startX, startZ;
     private float cellSize;
@@ -20,16 +20,19 @@ public class GridDragController : MonoBehaviour
     private int maxShift;
     private int width;
     private int height;
-    private readonly int moveRow = 2;
-    //De trong start vi ben kia init awake co the loi
+    private readonly int rowToMove = 2; 
     private void Start()
     {
+        gridSystem.OnLoadDataSuccess += GridSystem_OnLoadDataSuccess;
+    }
 
+    private void GridSystem_OnLoadDataSuccess()
+    {
+        Init();
     }
 
     private void Init()
     {
-        gridSystem = GetComponent<GridSystem>();
         grid = gridSystem.GetGrid();
         isDragging = false;
         isMoving = false;
@@ -66,7 +69,7 @@ public class GridDragController : MonoBehaviour
             currentMousePos = Mouse3D.GetMouseWorldPosition();
             float delta = currentMousePos.x - startMousePos.x;
             delta = Mathf.Clamp(delta, -totalWidth, totalWidth);
-            gridSystem.GetRowVisualGroup(moveRow).SetRowOffset(delta);
+            gridSystem.GetRowVisualGroup(rowToMove).SetRowOffset(delta);
         }
 
         if (Input.GetMouseButtonUp(0) && isDragging)
@@ -84,7 +87,7 @@ public class GridDragController : MonoBehaviour
                 {
                     for (int i = 0; i < shiftCount; i++)
                     {
-                        grid.ShiftRowRight(moveRow);
+                        grid.ShiftRowRight(rowToMove);
                         //Debug.Log($"Shift row {startZ} → {shiftCount} steps Right");
                     }
                 }
@@ -92,12 +95,12 @@ public class GridDragController : MonoBehaviour
                 {
                     for (int i = 0; i < -shiftCount; i++)
                     {
-                        grid.ShiftRowLeft(moveRow);
+                        grid.ShiftRowLeft(rowToMove);
                         //Debug.Log($"Shift row {startZ} ← {-shiftCount} steps Left");
                     }
                 }
             }
-            gridSystem.GetRowVisualGroup(moveRow).ResetPosition();
+            gridSystem.GetRowVisualGroup(rowToMove).ResetPosition();
             StartCoroutine(gridSystem.CheckDepartAndMove());
         }
 

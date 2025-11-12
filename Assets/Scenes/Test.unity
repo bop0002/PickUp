@@ -608,6 +608,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 94ce2d78fbfa5a04580c5b987ffd6eb6, type: 2}
   - {fileID: 11400000, guid: 6b9caefb1c616c84f8afe6de17e78a68, type: 2}
   - {fileID: 11400000, guid: 6769a4baee9a300478d9323638ca02b0, type: 2}
+  isProcessing: 0
 --- !u!114 &1873636041
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -620,6 +621,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0deb60b89c60ffe44b6ee56b68380469, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GridDragController
+  gridSystem: {fileID: 1873636037}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

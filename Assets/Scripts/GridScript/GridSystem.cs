@@ -3,6 +3,7 @@ using UnityEngine;
 using System.Collections.Generic;
 using UnityEngine.XR;
 using System;
+using UnityEngine.Networking;
 using Unity.Mathematics;
 using System.IO;
 using static UnityEngine.Rendering.DebugUI.Table;
@@ -44,12 +45,13 @@ public class GridSystem : MonoBehaviour
         InitDict();
         StartCoroutine(InitAfterLoad());
         // Init();
-        OnLoadDataSuccess?.Invoke();
     }
     IEnumerator InitAfterLoad()
     {
         yield return StartCoroutine(LoadData());
         Init();
+        //yield return null;
+        OnLoadDataSuccess?.Invoke();
     }
     IEnumerator LoadData()
     {
