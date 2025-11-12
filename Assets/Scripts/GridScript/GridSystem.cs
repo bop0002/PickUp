@@ -33,17 +33,44 @@ public class GridSystem : MonoBehaviour
     private float carGridTotalWidth;
     private SpawnData spawnData;
     public event Action<int> OnCenterGroupChange;
+    public event Action OnLoadDataSuccess;
     GameObject carGridParent;
     GameObject passengerGridParent;
     public bool isProcessing;
-    string folderSpawnPath;
-    string fileSpawnPath;
+    string fileURL;
     string json;
     private void Awake()
     {
         InitDict();
+        StartCoroutine(InitAfterLoad());
+        // Init();
+        OnLoadDataSuccess?.Invoke();
+    }
+    IEnumerator InitAfterLoad()
+    {
+        yield return StartCoroutine(LoadData());
         Init();
     }
+    IEnumerator LoadData()
+    {
+        string fileURL = Path.Combine(Application.streamingAssetsPath, "LevelPattern/level1.json");
+#if UNITY_WEBGL && !UNITY_EDITOR
+        UnityWebRequest www = UnityWebRequest.Get(fileURL);
+        yield return www.SendWebRequest();
+        if(www.result!=UnityWebRequest.Result.Success)
+        {
+            Debug.Log("Faild load json webgl");
+            yield break;
+        }
+        json = www.downloadHandler.text;
+#else
+        json = File.ReadAllText(fileURL);
+        yield return null;
+#endif
+        spawnData = JsonUtility.FromJson<SpawnData>(json);
+        Debug.Log("Load data succesful");
+    }
+    
     //Init base
     private void InitDict()
     {
@@ -79,10 +106,9 @@ public class GridSystem : MonoBehaviour
         rowParentGameObject = new List<RowVisualGroup>();
         passengerColumns = new List<GameObject>();
 
-        folderSpawnPath = Path.Combine(Application.streamingAssetsPath, "LevelPattern");
-        fileSpawnPath = Path.Combine(folderSpawnPath, "level1.json");
-        json = File.ReadAllText(fileSpawnPath);
-        spawnData = JsonUtility.FromJson<SpawnData>(json);
+        // fileURL = Path.Combine(Application.streamingAssetsPath, "LevelPattern/level1.json");
+        // json = File.ReadAllText(fileURL);
+        // spawnData = JsonUtility.FromJson<SpawnData>(json);
 
         gridCar.OnGridRowVisualChanged += GridCar_OnGridRowVisualChanged;
         gridCar.OnGridColumnVisualChanged += GridCar_OnGridColumnVisualChanged;

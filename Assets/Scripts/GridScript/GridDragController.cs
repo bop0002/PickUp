@@ -24,6 +24,11 @@ public class GridDragController : MonoBehaviour
     //De trong start vi ben kia init awake co the loi
     private void Start()
     {
+
+    }
+
+    private void Init()
+    {
         gridSystem = GetComponent<GridSystem>();
         grid = gridSystem.GetGrid();
         isDragging = false;
@@ -35,8 +40,6 @@ public class GridDragController : MonoBehaviour
         dragThreshold = 0.3f;
         maxShift = Mathf.RoundToInt(totalWidth / cellSize);
     }
-
-
 
 
     private void Update()
