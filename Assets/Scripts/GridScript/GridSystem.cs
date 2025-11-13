@@ -8,6 +8,7 @@ using Unity.Mathematics;
 using System.IO;
 using static UnityEngine.Rendering.DebugUI.Table;
 using System.Collections;
+using UnityEngine.UIElements;
 public class GridSystem : MonoBehaviour
 {
     [SerializeField] private List<CarSO> carSOList;
@@ -19,7 +20,7 @@ public class GridSystem : MonoBehaviour
     private List<RowVisualGroup> rowParentGameObject;
     private readonly int[] departIndexPassenger = { 0, 1, 2 };
     private readonly int[] departIndexCar = { 0, 2, 4 };
-    private readonly Vector3[] departPositions = { new Vector3(-6.86f, 0, -6.6f), new Vector3(-0.95f, 0, -6.6f), new Vector3(5.2f, 0, -6.6f) };
+    private readonly Vector3[] departPositions = { new Vector3(-6.86f, 0, -6.6f), new Vector3(-0.95f, 0, -6.6f), new Vector3(5.2f, 0, -6.6f) }; //Position dang loi!!!
     //private readonly Vector3[] departPositions = { new Vector3(-4f, 0, -6.6f), new Vector3(-1.35f, 0, -6.6f), new Vector3(1.3f, 0, -6.6f) };
     private CarSO carSO;
     private PassengerSO passengerSO;
