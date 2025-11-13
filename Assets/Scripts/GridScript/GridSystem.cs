@@ -17,8 +17,10 @@ public class GridSystem : MonoBehaviour
     private List<GameObject> passengerColumns;
     private List<EColor> carTypeSOList;
     private List<RowVisualGroup> rowParentGameObject;
-    private int[] departIndexPassenger = { 0, 1, 2 };
-    private int[] departIndexCar = { 0, 2, 4 };
+    private readonly int[] departIndexPassenger = { 0, 1, 2 };
+    private readonly int[] departIndexCar = { 0, 2, 4 };
+    private readonly Vector3[] departPositions = { new Vector3(-6.86f, 0, -6.6f), new Vector3(-0.95f, 0, -6.6f), new Vector3(5.2f, 0, -6.6f) };
+    //private readonly Vector3[] departPositions = { new Vector3(-4f, 0, -6.6f), new Vector3(-1.35f, 0, -6.6f), new Vector3(1.3f, 0, -6.6f) };
     private CarSO carSO;
     private PassengerSO passengerSO;
     private Grid<CarObject> gridCar;
@@ -149,14 +151,14 @@ public class GridSystem : MonoBehaviour
             //if (passengerArray[i, passengerZ].GetPassenger() == null) continue;
             while (carArray[currentCarColumnIndex, carZ].GetColor() == passengerArray[currentPassengerColumnIndex, passengerZ].GetColor())
             {
-                yield return StartCoroutine(PassengerDepart(passengerArray[currentPassengerColumnIndex, passengerZ]));
+                yield return StartCoroutine(PassengerDepart(passengerArray[currentPassengerColumnIndex, passengerZ], departPositions[i]));
                 countPassengerDepart++;
                 passengerZ = passengerHeight - countPassengerDepart;
                 carArray[currentCarColumnIndex, carZ].SeatDec();
                 if (carArray[currentCarColumnIndex, carZ].GetSeat() <= 0)
                 {
                     countCarDepart++;
-                    yield return StartCoroutine(CarDepart(carArray[currentCarColumnIndex, carZ]));
+                    yield return StartCoroutine(CarDepart(carArray[currentCarColumnIndex, carZ], departPositions[i]));
                     break;
                 }
             }
@@ -287,18 +289,18 @@ public class GridSystem : MonoBehaviour
     //}
 
 
-    private IEnumerator PassengerDepart(PassengerObject passengerObject)
+    private IEnumerator PassengerDepart(PassengerObject passengerObject,Vector3 departPos)
     {
-        passengerObject.GetPassenger().TestAnimationOnDepart();
-        yield return new WaitForSecondsRealtime(2);
+        yield return StartCoroutine(passengerObject.GetPassenger().TestAnimation(departPos));
+        yield return new WaitForSecondsRealtime(1);
         passengerObject.ClearObject();
         yield return null;
     }
 
-    private IEnumerator CarDepart(CarObject carObject)
+    private IEnumerator CarDepart(CarObject carObject,Vector3 departPos)
     {
-        carObject.GetCar().TestAnimationOnDepart();
-        yield return new WaitForSecondsRealtime(2);
+        yield return StartCoroutine(carObject.GetCar().TestAnimation(departPos));
+        yield return new WaitForSecondsRealtime(1);
         carObject.ClearObject();
         yield return null;
     }

@@ -4,7 +4,7 @@ using UnityEngine;
 
 public abstract class PlacedObject<TDataSO> : MonoBehaviour where TDataSO : ISO
 {
-    protected TDataSO dataSO;
+    private TDataSO dataSO;
     public static T Create<T>(Vector3 worldPosition, TDataSO dataSO) where T : PlacedObject<TDataSO>
     {
         Transform placedObjectTransform = Instantiate(dataSO.GetPrefab().transform, worldPosition, Quaternion.identity);
@@ -24,10 +24,7 @@ public abstract class PlacedObject<TDataSO> : MonoBehaviour where TDataSO : ISO
     {
         return dataSO.GetColor();
     }
-    public void TestAnimationOnDepart()
-    {
-        this.transform.localPosition += new Vector3(0, 1.2f, 0);
-    }
+    public abstract IEnumerator TestAnimation(Vector3 moveTarget);
     public void SelfDestroy() //hoac la delay 1 frame roi moi update sideVisual who know hoac la destyroy immediate
     {
         Destroy(this.gameObject);

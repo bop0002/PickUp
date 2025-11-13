@@ -46,6 +46,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3dddc74efeea80d4b8b972760b1dbb39, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Car
+  tempText: {fileID: 124930367405430356}
 --- !u!1 &6578339575597987970
 GameObject:
   m_ObjectHideFlags: 0

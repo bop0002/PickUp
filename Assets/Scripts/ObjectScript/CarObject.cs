@@ -13,10 +13,16 @@ public class CarObject : GridObject<Car,CarSO,CarObject>
     {
         SetObject(placeCar);
         seatSlot = slotSeated;
+        UpdateText();
+    }
+    public void UpdateText()
+    {
+        GetCar().UpdateText(seatSlot);
     }
     public void SeatDec()
     {
         seatSlot--;
+        UpdateText();
     }
     public int GetSeat()
     {
